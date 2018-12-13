@@ -1,0 +1,56 @@
+
+      <script>
+            $(document).ready(function () {
+      
+                  //get a reference to the element
+                  var boton = document.getElementById('boton');
+      
+      
+      
+                  $('#example').DataTable({
+                      "ajax": '../arrays.txt'
+
+                    //   Ocultar columna
+                    //   "columnDefs": [
+                    //     {
+                    //         "targets": [ 0 ],
+                    //         "visible": false
+                    //     }
+                    //                 ]
+
+                  });
+      
+                  //add event listener
+                  boton.addEventListener('click', function (event) {
+      
+                      $('#example').DataTable().ajax.reload();
+                      $('#modal').modal('show');
+      
+      
+                  });
+      
+      
+                  var table = $('#example').DataTable();
+ 
+ $('#example tbody').on( 'click', 'tr', function () {
+    
+    if ( $(this).hasClass('selected') ) {
+            $(this).removeClass('selected');
+        }
+        else {
+            table.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
+    
+    console.log( table.row( this ).data()[0] );
+
+    
+ } );
+
+
+              });//End documente ready
+      
+            </script>
+      
+      </body>
+      </html>
