@@ -3,6 +3,7 @@ const router = require('express').Router();
 const userController = require('../controllers/userController');
 
 router.get('/', userController.list);
+router.get('/consulta', userController.consulta);
 router.post('/add', userController.save);
 router.get('/update/:id', userController.edit);
 router.post('/update/:id', userController.update);

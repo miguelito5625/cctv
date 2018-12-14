@@ -7,12 +7,13 @@ const express = require('express'),
 const app = express();
 
 // importing routes
-const customerRoutes = require('./routes/user');
+const userRoutes = require('./routes/user');
 
 // settings
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
 
 // middlewares
 app.use(morgan('dev'));
@@ -25,12 +26,25 @@ app.use(myConnection(mysql, {
 }, 'single'));
 app.use(express.urlencoded({extended: false}));
 
-// routes
-app.use('/', customerRoutes);
-// app.use('/data', express.static(path.join(__dirname, 'views/arrays.txt')));
 
 // static files
 app.use(express.static(path.join(__dirname, 'public')));
+
+// routes
+app.use('/', userRoutes);
+app.use(function(req, res, next) {
+  res.status(404).render('404/index');
+});
+
+
+app.post('/test', function(request, response){
+  console.log(request.body.mail);
+  console.log(request.body.pass);
+
+  response.json({success : "Updated Successfully", status : 200});
+
+});
+
 
 // starting the server
 app.listen(app.get('port'), () => {

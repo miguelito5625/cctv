@@ -1,12 +1,45 @@
 const controller = {};
 
+controller.error404 = (req, res) => {
+
+
+  res.render('404/index');
+
+};
 
 controller.list = (req, res) => {
 
+  req.getConnection((err, conn) => {
+    conn.query('SELECT * FROM customer', (err, customers) => {
+     if (err) {
+      res.json(err);
+     }
+     res.render('customers', {
+        data: customers
+     });
+    });
+  });
 
   res.render('index');
 
 };
+
+
+controller.consulta = (req, res) => {
+
+  req.getConnection((err, conn) => {
+    conn.query('SELECT * FROM customer', (err, customers) => {
+     if (err) {
+      res.json(err);
+     }
+     const data = { customers };
+     res.json(data);
+    });
+  });
+
+
+};
+
 
 controller.save = (req, res) => {
   const data = req.body;

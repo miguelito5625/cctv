@@ -4,11 +4,23 @@
       
                   //get a reference to the element
                   var boton = document.getElementById('boton');
+                  var botonGuardar = document.getElementById('btnsave');
+                  var txtmail = document.getElementById('txtmail');
+                  var txtpassword = document.getElementById('txtpassword');
       
       
       
                   $('#example').DataTable({
-                      "ajax": '../arrays.txt'
+                    ajax: {
+                    url: "/consulta",
+                    dataSrc: "customers"
+                    },  
+                    columns:[
+                        {data: "id"},
+                        {data: "name"},
+                        {data: "address"},
+                        {data: "phone"}
+                    ]
 
                     //   Ocultar columna
                     //   "columnDefs": [
@@ -24,28 +36,53 @@
                   boton.addEventListener('click', function (event) {
       
                       $('#example').DataTable().ajax.reload();
-                      $('#modal').modal('show');
-      
-      
+                    //   $('#modal').modal('show');
+
                   });
+
+                  //add event listener
+                  botonGuardar.addEventListener('click', function (event) {
+
+                      $.ajax({
+                            url: "/test",
+                            type: "post",
+                            data: {
+                                'mail': txtmail.value,
+                                'pass': txtpassword.value
+                            } ,
+                            success: function (response) {
+                            // you will get response from your php page (what you echo or print)                 
+
+                            console.log(response);
+
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                            // console.log(textStatus, errorThrown);
+                            }
+                        });
+
+
+                    });
       
       
                   var table = $('#example').DataTable();
  
- $('#example tbody').on( 'click', 'tr', function () {
-    
-    if ( $(this).hasClass('selected') ) {
-            $(this).removeClass('selected');
-        }
-        else {
-            table.$('tr.selected').removeClass('selected');
-            $(this).addClass('selected');
-        }
-    
-    console.log( table.row( this ).data()[0] );
+                    $('#example tbody').on( 'click', 'tr', function () {
+                        
+                        if ( $(this).hasClass('selected') ) {
+                                $(this).removeClass('selected');
+                            }
+                            else {
+                                table.$('tr.selected').removeClass('selected');
+                                $(this).addClass('selected');
+                            }
 
-    
- } );
+                            var arr = Array.from(Object.keys(table.row( this ).data()), k=>table.row( this ).data()[k]);
+                        
+                        console.log( arr[0] );
+
+                        
+                    } );
 
 
               });//End documente ready
