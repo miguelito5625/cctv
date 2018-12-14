@@ -1,24 +1,40 @@
 const controller = {};
 
-controller.error404 = (req, res) => {
+controller.test = (req, res) => {
 
+  console.log(req.body.mail);
+  console.log(req.body.pass);
 
-  res.render('404/index');
+  res.json({success : "Updated Successfully", status : 200});
 
 };
 
-controller.list = (req, res) => {
+controller.error404 = (req, res, next) => {
 
-  req.getConnection((err, conn) => {
-    conn.query('SELECT * FROM customer', (err, customers) => {
-     if (err) {
-      res.json(err);
-     }
-     res.render('customers', {
-        data: customers
-     });
-    });
-  });
+  res.status(404).render('404/index');
+
+};
+
+
+// controller.error404 = (req, res) => {
+
+
+//   res.render('404/index');
+
+// };
+
+controller.indexPage = (req, res) => {
+
+  // req.getConnection((err, conn) => {
+  //   conn.query('SELECT * FROM customer', (err, customers) => {
+  //    if (err) {
+  //     res.json(err);
+  //    }
+  //    res.render('customers', {
+  //       data: customers
+  //    });
+  //   });
+  // });
 
   res.render('index');
 

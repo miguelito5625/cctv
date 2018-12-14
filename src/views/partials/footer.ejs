@@ -3,8 +3,8 @@
             $(document).ready(function () {
       
                   //get a reference to the element
-                  var boton = document.getElementById('boton');
-                  var botonGuardar = document.getElementById('btnsave');
+                  var btnAdd = document.getElementById('btnAdd');
+                  var btnSave = document.getElementById('btnSave');
                   var txtmail = document.getElementById('txtmail');
                   var txtpassword = document.getElementById('txtpassword');
       
@@ -20,28 +20,32 @@
                         {data: "name"},
                         {data: "address"},
                         {data: "phone"}
-                    ]
+                    ],
 
-                    //   Ocultar columna
-                    //   "columnDefs": [
-                    //     {
-                    //         "targets": [ 0 ],
-                    //         "visible": false
-                    //     }
-                    //                 ]
+                      //Ocultar columna
+                      "columnDefs": [
+                        {
+                            "targets": [ 0 ],
+                            "visible": false
+                        }
+                                    ]
 
                   });
       
                   //add event listener
-                  boton.addEventListener('click', function (event) {
+                  btnAdd.addEventListener('click', function (event) {
       
                       $('#example').DataTable().ajax.reload();
-                    //   $('#modal').modal('show');
+                      $('#modal').modal('show');
+                      
 
                   });
 
                   //add event listener
-                  botonGuardar.addEventListener('click', function (event) {
+                  btnSave.addEventListener('click', function (event) {
+
+                    //   console.log(txtmail.value);
+                    //   console.log(txtpassword.value);
 
                       $.ajax({
                             url: "/test",

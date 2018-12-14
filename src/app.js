@@ -32,18 +32,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 app.use('/', userRoutes);
-app.use(function(req, res, next) {
-  res.status(404).render('404/index');
-});
-
-
-app.post('/test', function(request, response){
-  console.log(request.body.mail);
-  console.log(request.body.pass);
-
-  response.json({success : "Updated Successfully", status : 200});
-
-});
+// app.use(function(req, res, next) {
+//   res.status(404).render('404/index');
+// });
 
 
 // starting the server
