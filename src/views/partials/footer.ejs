@@ -4,9 +4,15 @@
       
                   //get a reference to the element
                   var btnAdd = document.getElementById('btnAdd');
+                  var btnEdit = document.getElementById('btnEdit');
+                  var btnDelete = document.getElementById('btnDelete');
                   var btnSave = document.getElementById('btnSave');
-                  var txtmail = document.getElementById('txtmail');
-                  var txtpassword = document.getElementById('txtpassword');
+
+                  var txtName = document.getElementById('txtName');
+                  var txtAddress = document.getElementById('txtAddress');
+                  var txtPhone = document.getElementById('txtPhone');
+
+                  const socket = io();
       
       
       
@@ -48,11 +54,12 @@
                     //   console.log(txtpassword.value);
 
                       $.ajax({
-                            url: "/test",
+                            url: "/add",
                             type: "post",
                             data: {
-                                'mail': txtmail.value,
-                                'pass': txtpassword.value
+                                'name': txtName.value,
+                                'address': txtAddress.value,
+                                'phone': txtPhone.value
                             } ,
                             success: function (response) {
                             // you will get response from your php page (what you echo or print)                 
@@ -66,8 +73,20 @@
                         });
 
 
-                    });
-      
+                        socket.emit('notify:insert',{
+
+                        });
+
+                         $('#modal').modal('hide');
+
+                    });//End clic listener btn save
+
+
+                    btnEdit.addEventListener('click', function (event) {
+
+
+                     });//End clic listener btn edit
+
       
                   var table = $('#example').DataTable();
  
@@ -87,6 +106,17 @@
 
                         
                     } );
+
+
+
+                socket.on('notify:insert', function (data) {
+                    console.log('se inserto algo');
+                    $('#example').DataTable().ajax.reload();
+
+                          $.notify("Hay un nuevo registro");
+
+
+                })
 
 
               });//End documente ready

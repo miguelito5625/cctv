@@ -9,7 +9,7 @@ router.post('/add', userController.save);
 router.get('/update/:id', userController.edit);
 router.post('/update/:id', userController.update);
 router.get('/delete/:id', userController.delete);
-router.use(userController.error404);
+//router.use(userController.error404);
 
 
 module.exports = router;

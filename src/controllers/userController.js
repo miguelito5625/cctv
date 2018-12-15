@@ -2,10 +2,10 @@ const controller = {};
 
 controller.test = (req, res) => {
 
-  console.log(req.body.mail);
-  console.log(req.body.pass);
+  // console.log(req.body.mail);
+  // console.log(req.body.pass);
 
-  res.json({success : "Updated Successfully", status : 200});
+  // res.json({success : "Updated Successfully", status : 200});
 
 };
 
@@ -62,8 +62,14 @@ controller.save = (req, res) => {
   console.log(req.body)
   req.getConnection((err, connection) => {
     const query = connection.query('INSERT INTO customer set ?', data, (err, customer) => {
-      console.log(customer)
-      res.redirect('/');
+      
+      if (err) {
+        console.log('error en la insercion');
+      }
+
+      // console.log(customer)
+      console.log('Insercion correcta');
+      //res.redirect('/');
     })
   })
 };
