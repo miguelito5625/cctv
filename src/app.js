@@ -59,7 +59,16 @@ io.on('connection', (socket) =>{
 
     io.sockets.emit('notify:insert');
 
-  })
+  });
+
+
+  socket.on('notify:delete', (data) => {
+
+    console.log('Se borro algo');
+
+    io.sockets.emit('notify:delete');
+
+  });
 
 
 } );

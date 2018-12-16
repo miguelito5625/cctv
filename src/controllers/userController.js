@@ -96,13 +96,26 @@ controller.update = (req, res) => {
   });
 };
 
+// controller.delete = (req, res) => {
+//   const { id } = req.params;
+//   req.getConnection((err, connection) => {
+//     connection.query('DELETE FROM customer WHERE id = ?', [id], (err, rows) => {
+//       res.redirect('/');
+//     });
+//   });
+// }
+
 controller.delete = (req, res) => {
-  const { id } = req.params;
+  const data = req.body;
   req.getConnection((err, connection) => {
-    connection.query('DELETE FROM customer WHERE id = ?', [id], (err, rows) => {
-      res.redirect('/');
+    connection.query('DELETE FROM customer WHERE id = ?', data.id, (err, rows) => {
+      //res.redirect('/');
+      
     });
   });
 }
+
+
+
 
 module.exports = controller;

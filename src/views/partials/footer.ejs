@@ -5,20 +5,23 @@
                   //get a reference to the element
                   var btnAdd = document.getElementById('btnAdd');
                   var btnEdit = document.getElementById('btnEdit');
+                  btnEdit.disabled = true;
                   var btnDelete = document.getElementById('btnDelete');
+                  btnDelete.disabled = true;
                   var btnSave = document.getElementById('btnSave');
 
                   var txtName = document.getElementById('txtName');
                   var txtAddress = document.getElementById('txtAddress');
                   var txtPhone = document.getElementById('txtPhone');
 
+                  var customer_id = 0;
                   const socket = io();
       
       
       
                   $('#example').DataTable({
                     ajax: {
-                    url: "/consulta",
+                    url: "/list",
                     dataSrc: "customers"
                     },  
                     columns:[
@@ -73,9 +76,7 @@
                         });
 
 
-                        socket.emit('notify:insert',{
-
-                        });
+                        socket.emit('notify:insert');
 
                          $('#modal').modal('hide');
 
@@ -87,6 +88,31 @@
 
                      });//End clic listener btn edit
 
+                    btnDelete.addEventListener('click', function (event) {
+
+                        $.ajax({
+                            url: "/delete",
+                            type: "post",
+                            data: {
+                                'id': costumer_id
+                            } ,
+                            success: function (response) {
+                            // you will get response from your php page (what you echo or print)                 
+
+                            console.log(response);
+
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                            // console.log(textStatus, errorThrown);
+                            }
+                        });
+
+                        socket.emit('notify:delete');
+                        btnDelete.disabled = true;
+                        btnEdit.disabled = true;
+
+                    });//End clic listener btn delete
+
       
                   var table = $('#example').DataTable();
  
@@ -94,30 +120,71 @@
                         
                         if ( $(this).hasClass('selected') ) {
                                 $(this).removeClass('selected');
+                                
+                                btnEdit.disabled = true;
+                                btnDelete.disabled = true;
                             }
                             else {
                                 table.$('tr.selected').removeClass('selected');
                                 $(this).addClass('selected');
+                                btnEdit.disabled = false;
+                                btnDelete.disabled = false;
+                                
                             }
 
                             var arr = Array.from(Object.keys(table.row( this ).data()), k=>table.row( this ).data()[k]);
                         
-                        console.log( arr[0] );
+                        costumer_id = arr[0];
+                        console.log( costumer_id );
 
                         
                     } );
 
 
-
+                
+                // Conexion del socket
                 socket.on('notify:insert', function (data) {
                     console.log('se inserto algo');
                     $('#example').DataTable().ajax.reload();
 
-                          $.notify("Hay un nuevo registro");
 
 
-                })
+                          $.notify("Hay un nuevo registro", {
+                                animate: {
+                                    enter: 'animated fadeInRight',
+                                    exit: 'animated zoomOutUp'
+                                }
+                            });
 
+                            setTimeout(function() {
+                                $.notifyClose();
+                            }, 2200);
+                            
+
+                });//End socket notify insert
+
+
+
+                // se activa el socket cuando ocurre una eliminacion
+                socket.on('notify:delete', function (data) {
+                    console.log('se elimino algo');
+                    $('#example').DataTable().ajax.reload();
+
+
+
+                        $.notify("Se elimino un registro", {
+                            animate: {
+                                    enter: 'animated fadeInRight',
+                                    exit: 'animated zoomOutUp'
+                                },
+                                type: 'danger'
+                        });
+
+                            setTimeout(function() {
+                                $.notifyClose();
+                            }, 2200);
+                            
+                });//End socket notify delete
 
               });//End documente ready
       
