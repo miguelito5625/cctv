@@ -103,5 +103,220 @@
       <!-- End Modal -->
 
 
+      <script>
+        $(document).ready(function () {
+  
+              //get a reference to the element
+              var btnAdd = document.getElementById('btnAdd');
+              var btnEdit = document.getElementById('btnEdit');
+              btnEdit.disabled = true;
+              var btnDelete = document.getElementById('btnDelete');
+              btnDelete.disabled = true;
+              var btnSave = document.getElementById('btnSave');
+
+              var txtName = document.getElementById('txtName');
+              var txtAddress = document.getElementById('txtAddress');
+              var txtPhone = document.getElementById('txtPhone');
+
+              var customer_id = 0;
+              const socket = io();
+  
+  
+  
+              $('#example').DataTable({
+                ajax: {
+                url: "/list",
+                dataSrc: "customers"
+                },  
+                columns:[
+                    {data: "id"},
+                    {data: "name"},
+                    {data: "address"},
+                    {data: "phone"}
+                ],
+
+                  //Ocultar columna
+                  "columnDefs": [
+                    {
+                        "targets": [ 0 ],
+                        "visible": false
+                    }
+                                ]
+
+              });
+  
+              
+
+              //add event listener
+              btnAdd.addEventListener('click', function (event) {
+  
+                  //$('#example').DataTable().ajax.reload();
+                  $('#modal').modal('show');
+                  
+
+              });
+
+              //add event listener
+              btnSave.addEventListener('click', function (event) {
+
+                //   console.log(txtmail.value);
+                //   console.log(txtpassword.value);
+
+                  $.ajax({
+                        url: "/add",
+                        type: "post",
+                        data: {
+                            'name': txtName.value,
+                            'address': txtAddress.value,
+                            'phone': txtPhone.value
+                        } ,
+                        success: function (response) {
+                        // you will get response from your php page (what you echo or print) 
+                        
+                        if (response == 'error') {
+                          $.notify("Ha ocurrido un error", {
+                        animate: {
+                                enter: 'animated fadeInRight',
+                                exit: 'animated zoomOutUp'
+                            },
+                            type: 'danger'
+                    });
+
+                        setTimeout(function() {
+                            $.notifyClose();
+                        }, 2200);
+
+                        }
+
+                        if (response == 'ok') {
+                          socket.emit('notify:insert');
+                        }
+
+                        console.log(response);
+
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                        // console.log(textStatus, errorThrown);
+                        }
+                    });
+
+
+                    
+
+                     $('#modal').modal('hide');
+
+                });//End clic listener btn save
+
+
+                btnEdit.addEventListener('click', function (event) {
+
+
+                 });//End clic listener btn edit
+
+                btnDelete.addEventListener('click', function (event) {
+
+                    $.ajax({
+                        url: "/delete",
+                        type: "post",
+                        data: {
+                            'id': costumer_id
+                        } ,
+                        success: function (response) {
+                        // you will get response from your php page (what you echo or print)                 
+
+                        console.log(response);
+
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                        // console.log(textStatus, errorThrown);
+                        }
+                    });
+
+                    socket.emit('notify:delete');
+                    btnDelete.disabled = true;
+                    btnEdit.disabled = true;
+
+                });//End clic listener btn delete
+
+  
+              var table = $('#example').DataTable();
+
+                $('#example tbody').on( 'click', 'tr', function () {
+                    
+                    if ( $(this).hasClass('selected') ) {
+                            $(this).removeClass('selected');
+                            
+                            btnEdit.disabled = true;
+                            btnDelete.disabled = true;
+                        }
+                        else {
+                            table.$('tr.selected').removeClass('selected');
+                            $(this).addClass('selected');
+                            btnEdit.disabled = false;
+                            btnDelete.disabled = false;
+                            
+                        }
+
+                        var arr = Array.from(Object.keys(table.row( this ).data()), k=>table.row( this ).data()[k]);
+                    
+                    costumer_id = arr[0];
+                    console.log( costumer_id );
+
+                    
+                } );
+
+
+            
+            // Conexion del socket
+            socket.on('notify:insert', function (data) {
+
+              $('#example').DataTable().ajax.reload();
+
+
+
+                      $.notify("Hay un nuevo registro", {
+                            animate: {
+                                enter: 'animated fadeInRight',
+                                exit: 'animated zoomOutUp'
+                            }
+                        });
+
+                        setTimeout(function() {
+                            $.notifyClose();
+                        }, 2200);
+                        
+
+            });//End socket notify insert
+
+
+
+            // se activa el socket cuando ocurre una eliminacion
+            socket.on('notify:delete', function (data) {
+
+              $('#example').DataTable().ajax.reload();
+
+
+
+                    $.notify("Se elimino un registro", {
+                        animate: {
+                                enter: 'animated fadeInRight',
+                                exit: 'animated zoomOutUp'
+                            },
+                            type: 'danger'
+                    });
+
+                        setTimeout(function() {
+                            $.notifyClose();
+                        }, 2200);
+                        
+            });//End socket notify delete
+
+          });//End documente ready
+  
+        </script>
+
+
+
+
       <% include partials/footer %>
 

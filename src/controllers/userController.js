@@ -1,14 +1,5 @@
 const controller = {};
 
-controller.test = (req, res) => {
-
-  // console.log(req.body.mail);
-  // console.log(req.body.pass);
-
-  // res.json({success : "Updated Successfully", status : 200});
-
-};
-
 controller.error404 = (req, res, next) => {
 
   res.status(404).render('404/index');
@@ -16,25 +7,7 @@ controller.error404 = (req, res, next) => {
 };
 
 
-// controller.error404 = (req, res) => {
-
-
-//   res.render('404/index');
-
-// };
-
 controller.indexPage = (req, res) => {
-
-  // req.getConnection((err, conn) => {
-  //   conn.query('SELECT * FROM customer', (err, customers) => {
-  //    if (err) {
-  //     res.json(err);
-  //    }
-  //    res.render('customers', {
-  //       data: customers
-  //    });
-  //   });
-  // });
 
   res.render('index');
 
@@ -65,13 +38,14 @@ controller.save = (req, res) => {
       
       if (err) {
         console.log('error en la insercion');
+        res.send('error');
+      }else{
+        console.log('Insercion correcta');
+        res.send('ok');
       }
 
-      // console.log(customer)
-      console.log('Insercion correcta');
-      //res.redirect('/');
-    })
-  })
+    });
+  });
 };
 
 controller.edit = (req, res) => {
@@ -96,14 +70,6 @@ controller.update = (req, res) => {
   });
 };
 
-// controller.delete = (req, res) => {
-//   const { id } = req.params;
-//   req.getConnection((err, connection) => {
-//     connection.query('DELETE FROM customer WHERE id = ?', [id], (err, rows) => {
-//       res.redirect('/');
-//     });
-//   });
-// }
 
 controller.delete = (req, res) => {
   const data = req.body;

@@ -16,7 +16,7 @@ app.set('view engine', 'ejs');
 
 
 // middlewares
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 app.use(myConnection(mysql, {
   host: '35.237.171.241',
   user: 'administrador',
@@ -55,7 +55,7 @@ io.on('connection', (socket) =>{
 
   socket.on('notify:insert', (data) => {
 
-    console.log('Se inserto algo');
+    //console.log('Se inserto algo');
 
     io.sockets.emit('notify:insert');
 
