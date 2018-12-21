@@ -197,6 +197,19 @@
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                         // console.log(textStatus, errorThrown);
+
+                        $.notify("Ha ocurrido un error", {
+                        animate: {
+                                enter: 'animated fadeInRight',
+                                exit: 'animated zoomOutUp'
+                            },
+                            type: 'danger'
+                    });
+
+                        setTimeout(function() {
+                            $.notifyClose();
+                        }, 2200);
+
                         }
                     });
 
