@@ -10,7 +10,7 @@ const app = express();
 const userRoutes = require('./routes/user');
 
 // settings
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 80);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -18,9 +18,9 @@ app.set('view engine', 'ejs');
 // middlewares
 //app.use(morgan('dev'));
 app.use(myConnection(mysql, {
-  host: '35.237.171.241',
-  user: 'administrador',
-  password: 'moralesizabal',
+  host: '35.231.232.185',
+  user: 'root',
+  password: 'mariobross5625',
   port: 3306,
   database: 'crudnodejsmysql'
 }, 'single'));
@@ -67,6 +67,14 @@ io.on('connection', (socket) =>{
     console.log('Se borro algo');
 
     io.sockets.emit('notify:delete');
+
+  });
+
+  socket.on('notify:update', (data) => {
+
+    console.log('Se actualizo algo');
+
+    io.sockets.emit('notify:update');
 
   });
 

@@ -13,16 +13,22 @@ controller.indexPage = (req, res) => {
 
 };
 
+controller.camsPage = (req, res) => {
 
-controller.consulta = (req, res) => {
+  res.render('cams/index');
+
+};
+
+
+controller.camList = (req, res) => {
 
   req.getConnection((err, conn) => {
     conn.query('SELECT * FROM customer', (err, customers) => {
-     if (err) {
-      res.json(err);
-     }
-     const data = { customers };
-     res.json(data);
+      if (err) {
+        res.json(err);
+      }
+      const data = { customers };
+      res.json(data);
     });
   });
 
@@ -30,16 +36,16 @@ controller.consulta = (req, res) => {
 };
 
 
-controller.save = (req, res) => {
+controller.camsAdd = (req, res) => {
   const data = req.body;
   console.log(req.body)
   req.getConnection((err, connection) => {
     const query = connection.query('INSERT INTO customer set ?', data, (err, customer) => {
-      
+
       if (err) {
         console.log('error en la insercion');
         res.send('error');
-      }else{
+      } else {
         console.log('Insercion correcta');
         res.send('ok');
       }
@@ -48,34 +54,41 @@ controller.save = (req, res) => {
   });
 };
 
-controller.edit = (req, res) => {
-  const { id } = req.params;
+
+controller.camsUpdate = (req, res) => {
+
+  const id = req.body.id;
+  const newCustomer = req.body;
+
   req.getConnection((err, conn) => {
-    conn.query("SELECT * FROM customer WHERE id = ?", [id], (err, rows) => {
-      res.render('customers_edit', {
-        data: rows[0]
-      })
+
+    conn.query('UPDATE customer set ? where id = ?', [newCustomer, id], (err, rows) => {
+
+      if (err) {
+        console.log('error en la insercion');
+        res.send('error');
+      } else {
+        console.log('Insercion correcta');
+        res.send('ok');
+      }
+
     });
   });
-};
 
-controller.update = (req, res) => {
-  const { id } = req.params;
-  const newCustomer = req.body;
-  req.getConnection((err, conn) => {
 
-  conn.query('UPDATE customer set ? where id = ?', [newCustomer, id], (err, rows) => {
-    res.redirect('/');
-  });
-  });
 };
 
 
-controller.delete = (req, res) => {
+controller.camsDelete = (req, res) => {
   const data = req.body;
   req.getConnection((err, connection) => {
     connection.query('DELETE FROM customer WHERE id = ?', data.id, (err, rows) => {
-      //res.redirect('/');
+      
+      if(err){
+        console.log('error');
+      }else{
+        console.log('ok');
+      }
       
     });
   });
