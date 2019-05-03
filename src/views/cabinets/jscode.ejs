@@ -1,3 +1,5 @@
+
+
 <script>
     $(document).ready(function () {
 
@@ -11,14 +13,19 @@
 
         var btnUpdate = document.getElementById('btnUpdate');
 
-        var txtName = document.getElementById('txtName');
-        var txtAddress = document.getElementById('txtAddress');
-        var txtPhone = document.getElementById('txtPhone');
+        var txtIdentifier = document.getElementById('txtIdentifier');
+        var txtLocation = document.getElementById('txtLocation');
+        var txtCoordinates = document.getElementById('txtCoordinates');
 
         const socket = io();
 
         //temporalmente se guarda el registro de la fila seleccionada
         var row_array;
+
+        $('#txtCoordinates').click(function (e) {
+            $('#modalMap').modal('show');
+
+        });
 
         $('#tableCabinets').DataTable({
             ajax: {
@@ -46,12 +53,39 @@
         });
 
 
+        var table = $('#tableCabinets').DataTable();
+
+
+        $('#tableCabinets tbody').on('click', 'tr', function () {
+
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+
+                btnEdit.disabled = true;
+                btnDelete.disabled = true;
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+                btnEdit.disabled = false;
+                btnDelete.disabled = false;
+
+            }
+
+            row_array = Array.from(Object.keys(table.row(this).data()), k => table.row(this).data()[k]);
+
+            // console.log( row_array );
+
+
+        }); //fin evento click de la tabla
+
 
         //add event listener
         btnAdd.addEventListener('click', function (event) {
 
             //$('#tableCabinets').DataTable().ajax.reload();
             $('#modalSave').modal('show');
+            // $('#modalMap').modal('show');
 
 
         });
@@ -63,12 +97,12 @@
             //   console.log(txtpassword.value);
 
             $.ajax({
-                url: "/cams/add",
+                url: "/cabinets/add",
                 type: "post",
                 data: {
-                    'name': txtName.value,
-                    'address': txtAddress.value,
-                    'phone': txtPhone.value
+                    'identificador': txtIdentifier.value,
+                    'ubicacion': txtLocation.value,
+                    'coordenadas': txtCoordinates.value
                 },
                 success: function (response) {
                     // you will get response from your php page (what you echo or print) 
@@ -124,9 +158,9 @@
 
             $('#modalEditRow').modal('show');
 
-            document.getElementById("edittxtName").value = row_array[1];
-            document.getElementById("edittxtAddress").value = row_array[2];
-            document.getElementById("edittxtPhone").value = row_array[3];
+            document.getElementById("editTxtIdentifier").value = row_array[1];
+            document.getElementById("editTxtLocation").value = row_array[2];
+            document.getElementById("editTxtCoordinates").value = row_array[3];
 
 
         });//End clic listener btn edit
@@ -135,13 +169,13 @@
         btnUpdate.addEventListener('click', function (event) {
 
             $.ajax({
-                url: "/cams/update",
+                url: "/cabinets/update",
                 type: "post",
                 data: {
                     'id': row_array[0],
-                    'name': document.getElementById("edittxtName").value,
-                    'address': document.getElementById("edittxtAddress").value,
-                    'phone': document.getElementById("edittxtPhone").value
+                    'identificador': document.getElementById("editTxtIdentifier").value,
+                    'ubicacion': document.getElementById("editTxtLocation").value,
+                    'coordenadas': document.getElementById("editTxtCoordinates").value
                 },
                 success: function (response) {
                     // you will get response from your php page (what you echo or print)                 
@@ -183,7 +217,7 @@
         btnDelete.addEventListener('click', function (event) {
 
             $.ajax({
-                url: "/cams/delete",
+                url: "/cabinets/delete",
                 type: "post",
                 data: {
                     'id': row_array[0]
@@ -205,32 +239,6 @@
 
         });//End clic listener btn delete
 
-
-        var table = $('#tableCabinets').DataTable();
-
-
-        $('#tableCabinets tbody').on('click', 'tr', function () {
-
-            if ($(this).hasClass('selected')) {
-                $(this).removeClass('selected');
-
-                btnEdit.disabled = true;
-                btnDelete.disabled = true;
-            }
-            else {
-                table.$('tr.selected').removeClass('selected');
-                $(this).addClass('selected');
-                btnEdit.disabled = false;
-                btnDelete.disabled = false;
-
-            }
-
-            row_array = Array.from(Object.keys(table.row(this).data()), k => table.row(this).data()[k]);
-
-            // console.log( row_array );
-
-
-        });
 
 
 
@@ -302,4 +310,10 @@
 
     });//End documente ready
 
+
+
+
 </script>
+
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZ6jl9RJQsJWwTVwLu0k300oy8DIvxIJY&callback=initMap&libraries=places" async defer></script> -->
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZ6jl9RJQsJWwTVwLu0k300oy8DIvxIJY&libraries=places&callback=initMap"></script> -->

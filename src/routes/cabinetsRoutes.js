@@ -4,8 +4,8 @@ const cabinetsController = require('../controllers/cabinetsController');
 
 router.get('/cabinets', cabinetsController.cabinetEmpy);
 router.get('/cabinets/list', cabinetsController.cabinetList);
-// router.post('/cabinets/add', userController.camsAdd);
-// router.post('/cabinets/update', userController.camsUpdate);
-// router.post('/cabinets/delete', userController.camsDelete);
+router.post('/cabinets/add', cabinetsController.cabinetAdd);
+router.post('/cabinets/update', cabinetsController.cabinetUpdate);
+router.post('/cabinets/delete', cabinetsController.cabinetDelete);
 
 module.exports = router;
