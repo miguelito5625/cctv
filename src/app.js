@@ -8,7 +8,7 @@ const app = express();
 
 // importing routes
 const cabinetsRoutes = require('./routes/cabinetsRoutes');
-const userRoutes = require('./routes/camsRoutes');
+const camsRoutes = require('./routes/camsRoutes');
 
 // settings
 app.set('port', process.env.PORT || 80);
@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 app.use('/', cabinetsRoutes);
-app.use('/', userRoutes);
+app.use('/', camsRoutes);
 // app.use(function(req, res, next) {
 //   res.status(404).render('404/index');
 // });

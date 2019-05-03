@@ -20,17 +20,19 @@
         //temporalmente se guarda el registro de la fila seleccionada
         var row_array;
 
-        $('#example').DataTable({
+        $('#tableCabinets').DataTable({
             ajax: {
-                url: "/cams/list",
-                type: "post",
-                dataSrc: "customers"
+                url: "/cabinets/list",
+                type: "get",
+                dataSrc: "Gabinetes"
             },
             columns: [
                 { data: "id" },
-                { data: "name" },
-                { data: "address" },
-                { data: "phone" }
+                { data: "identificador" },
+                { data: "ubicacion" },
+                { data: "coordenadas" },
+                { data: "updated_at" },
+                { data: "created_at" }
             ],
 
             //Ocultar columna
@@ -48,7 +50,7 @@
         //add event listener
         btnAdd.addEventListener('click', function (event) {
 
-            //$('#example').DataTable().ajax.reload();
+            //$('#tableCabinets').DataTable().ajax.reload();
             $('#modalSave').modal('show');
 
 
@@ -204,10 +206,10 @@
         });//End clic listener btn delete
 
 
-        var table = $('#example').DataTable();
+        var table = $('#tableCabinets').DataTable();
 
 
-        $('#example tbody').on('click', 'tr', function () {
+        $('#tableCabinets tbody').on('click', 'tr', function () {
 
             if ($(this).hasClass('selected')) {
                 $(this).removeClass('selected');
@@ -235,7 +237,7 @@
         // Conexion del socket
         socket.on('notify:insert', function (data) {
 
-            $('#example').DataTable().ajax.reload();
+            $('#tableCabinets').DataTable().ajax.reload();
 
 
 
@@ -258,7 +260,7 @@
         // se activa el socket cuando ocurre una eliminacion
         socket.on('notify:delete', function (data) {
 
-            $('#example').DataTable().ajax.reload();
+            $('#tableCabinets').DataTable().ajax.reload();
 
 
 
@@ -280,7 +282,7 @@
         // se activa el socket cuando ocurre un update
         socket.on('notify:update', function (data) {
 
-            $('#example').DataTable().ajax.reload();
+            $('#tableCabinets').DataTable().ajax.reload();
 
 
 
