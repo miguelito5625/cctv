@@ -7,7 +7,8 @@ const express = require('express'),
 const app = express();
 
 // importing routes
-const userRoutes = require('./routes/user');
+const cabinetsRoutes = require('./routes/cabinetsRoutes');
+const userRoutes = require('./routes/camsRoutes');
 
 // settings
 app.set('port', process.env.PORT || 80);
@@ -18,11 +19,11 @@ app.set('view engine', 'ejs');
 // middlewares
 //app.use(morgan('dev'));
 app.use(myConnection(mysql, {
-  host: '35.231.232.185',
-  user: 'root',
+  host: '35.185.125.18',
+  user: 'desarrollador',
   password: 'mariobross5625',
   port: 3306,
-  database: 'crudnodejsmysql'
+  database: 'cctv'
 }, 'single'));
 app.use(express.urlencoded({extended: false}));
 
@@ -31,6 +32,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
+app.use('/', cabinetsRoutes);
 app.use('/', userRoutes);
 // app.use(function(req, res, next) {
 //   res.status(404).render('404/index');

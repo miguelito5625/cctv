@@ -1,0 +1,303 @@
+<script>
+    $(document).ready(function () {
+
+        //get a reference to the element
+        var btnAdd = document.getElementById('btnAdd');
+        var btnEdit = document.getElementById('btnEdit');
+        btnEdit.disabled = true;
+        var btnDelete = document.getElementById('btnDelete');
+        btnDelete.disabled = true;
+        var btnSave = document.getElementById('btnSave');
+
+        var btnUpdate = document.getElementById('btnUpdate');
+
+        var txtName = document.getElementById('txtName');
+        var txtAddress = document.getElementById('txtAddress');
+        var txtPhone = document.getElementById('txtPhone');
+
+        const socket = io();
+
+        //temporalmente se guarda el registro de la fila seleccionada
+        var row_array;
+
+        $('#example').DataTable({
+            ajax: {
+                url: "/cams/list",
+                type: "post",
+                dataSrc: "customers"
+            },
+            columns: [
+                { data: "id" },
+                { data: "name" },
+                { data: "address" },
+                { data: "phone" }
+            ],
+
+            //Ocultar columna
+            "columnDefs": [
+                {
+                    "targets": [0],
+                    "visible": false
+                }
+            ]
+
+        });
+
+
+
+        //add event listener
+        btnAdd.addEventListener('click', function (event) {
+
+            //$('#example').DataTable().ajax.reload();
+            $('#modalSave').modal('show');
+
+
+        });
+
+        //add event listener
+        btnSave.addEventListener('click', function (event) {
+
+            //   console.log(txtmail.value);
+            //   console.log(txtpassword.value);
+
+            $.ajax({
+                url: "/cams/add",
+                type: "post",
+                data: {
+                    'name': txtName.value,
+                    'address': txtAddress.value,
+                    'phone': txtPhone.value
+                },
+                success: function (response) {
+                    // you will get response from your php page (what you echo or print) 
+
+                    if (response == 'error') {
+                        $.notify("Ha ocurrido un error", {
+                            animate: {
+                                enter: 'animated fadeInRight',
+                                exit: 'animated zoomOutUp'
+                            },
+                            type: 'danger'
+                        });
+
+                        setTimeout(function () {
+                            $.notifyClose();
+                        }, 2200);
+
+                    }
+
+                    if (response == 'ok') {
+                        socket.emit('notify:insert');
+                    }
+
+                    console.log(response);
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // console.log(textStatus, errorThrown);
+
+                    $.notify("Ha ocurrido un error", {
+                        animate: {
+                            enter: 'animated fadeInRight',
+                            exit: 'animated zoomOutUp'
+                        },
+                        type: 'danger'
+                    });
+
+                    setTimeout(function () {
+                        $.notifyClose();
+                    }, 2200);
+
+                }
+            });
+
+
+
+
+            $('#modalSave').modal('hide');
+
+        });//End clic listener btn save
+
+        btnEdit.addEventListener('click', function (event) {
+
+            $('#modalEditRow').modal('show');
+
+            document.getElementById("edittxtName").value = row_array[1];
+            document.getElementById("edittxtAddress").value = row_array[2];
+            document.getElementById("edittxtPhone").value = row_array[3];
+
+
+        });//End clic listener btn edit
+
+        //update event listener
+        btnUpdate.addEventListener('click', function (event) {
+
+            $.ajax({
+                url: "/cams/update",
+                type: "post",
+                data: {
+                    'id': row_array[0],
+                    'name': document.getElementById("edittxtName").value,
+                    'address': document.getElementById("edittxtAddress").value,
+                    'phone': document.getElementById("edittxtPhone").value
+                },
+                success: function (response) {
+                    // you will get response from your php page (what you echo or print)                 
+
+                    if (response == 'error') {
+                        $.notify("Ha ocurrido un error", {
+                            animate: {
+                                enter: 'animated fadeInRight',
+                                exit: 'animated zoomOutUp'
+                            },
+                            type: 'danger'
+                        });
+
+                        setTimeout(function () {
+                            $.notifyClose();
+                        }, 2200);
+
+                    }
+
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // console.log(textStatus, errorThrown);
+                }
+
+            });
+
+            socket.emit('notify:update');
+            btnDelete.disabled = true;
+            btnEdit.disabled = true;
+            $('#modalEditRow').modal('hide');
+
+
+        });
+
+
+
+        btnDelete.addEventListener('click', function (event) {
+
+            $.ajax({
+                url: "/cams/delete",
+                type: "post",
+                data: {
+                    'id': row_array[0]
+                },
+                success: function (response) {
+                    // you will get response from your php page (what you echo or print)                 
+
+                    console.log(response);
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // console.log(textStatus, errorThrown);
+                }
+            });
+
+            socket.emit('notify:delete');
+            btnDelete.disabled = true;
+            btnEdit.disabled = true;
+
+        });//End clic listener btn delete
+
+
+        var table = $('#example').DataTable();
+
+
+        $('#example tbody').on('click', 'tr', function () {
+
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+
+                btnEdit.disabled = true;
+                btnDelete.disabled = true;
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+                btnEdit.disabled = false;
+                btnDelete.disabled = false;
+
+            }
+
+            row_array = Array.from(Object.keys(table.row(this).data()), k => table.row(this).data()[k]);
+
+            // console.log( row_array );
+
+
+        });
+
+
+
+        // Conexion del socket
+        socket.on('notify:insert', function (data) {
+
+            $('#example').DataTable().ajax.reload();
+
+
+
+            $.notify("Hay un nuevo registro", {
+                animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated zoomOutUp'
+                }
+            });
+
+            setTimeout(function () {
+                $.notifyClose();
+            }, 2200);
+
+
+        });//End socket notify insert
+
+
+
+        // se activa el socket cuando ocurre una eliminacion
+        socket.on('notify:delete', function (data) {
+
+            $('#example').DataTable().ajax.reload();
+
+
+
+            $.notify("Se elimino un registro", {
+                animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated zoomOutUp'
+                },
+                type: 'danger'
+            });
+
+            setTimeout(function () {
+                $.notifyClose();
+            }, 2200);
+
+        });//End socket notify delete
+
+
+        // se activa el socket cuando ocurre un update
+        socket.on('notify:update', function (data) {
+
+            $('#example').DataTable().ajax.reload();
+
+
+
+            $.notify("Se actualizo un registro", {
+                animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated zoomOutUp'
+                }
+                // type: 'info'
+            });
+
+            setTimeout(function () {
+                $.notifyClose();
+            }, 2200);
+
+        });//End socket notify update
+
+    });//End documente ready
+
+</script>

@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const userController = require('../controllers/userController');
+const userController = require('../controllers/camsController');
 
 router.get('/', userController.indexPage);
 
@@ -9,6 +9,7 @@ router.post('/cams/list', userController.camList);
 router.post('/cams/add', userController.camsAdd);
 router.post('/cams/update', userController.camsUpdate);
 router.post('/cams/delete', userController.camsDelete);
+
 
 //router.post('/test', userController.test);
 
