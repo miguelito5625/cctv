@@ -1,0 +1,126 @@
+<!-- Modals -->
+
+<!-- Modal new entry -->
+<div class="modal fade" id="modalSave" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Registrar Gabinete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form>
+          <div class="form-group">
+            <label for="txtIdentifier">Identificador</label>
+            <input type="text" id="txtIdentifier" class="form-control" placeholder="Ingresar el Identificador del gabinete">
+          </div>
+          <div class="form-group">
+            <label for="txtLocation">Ubicación</label>
+            <input type="text" id="txtLocation" class="form-control" placeholder="Ingresar la Ubicación del gabinete">
+          </div>
+          <div class="form-group">
+            <label for="txtCoordinates">Coordenadas</label>
+            <input style="background-color: white;" type="text" id="txtCoordinates" class="form-control" placeholder="click para Ingresar las Coordenadas del gabinete" readonly>
+          </div>
+
+          <input type="hidden" id="latitud">
+          <input type="hidden" id="longitud">
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="btnSave" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal new entry -->
+
+<!-- Modal edit row -->
+<div class="modal fade" id="modalEditRow" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar Gabinete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form>
+          <div class="form-group">
+            <label for="editTxtIdentifier">Identificador</label>
+            <input type="text" id="editTxtIdentifier" class="form-control" placeholder="Ingresar el Identificador del gabinete">
+          </div>
+          <div class="form-group">
+            <label for="editTxtLocation">Ubicación</label>
+            <input type="text" id="editTxtLocation" class="form-control" placeholder="Ingresar la Ubicación del gabinete">
+          </div>
+          <div class="form-group">
+            <label for="editTxtCoordinates">Coordenadas</label>
+            <input style="background-color: white;" type="text" id="editTxtCoordinates" class="form-control" placeholder="Ingresar las Coordenadas del gabinete" readonly>
+          </div>
+
+          <input type="hidden" id="editTxtLatitude">
+          <input type="hidden" id="editTxtLongitude">
+          
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="btnUpdate" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal edit row -->
+
+<style>
+.pac-container {
+    z-index: 1100 !important;
+}
+</style>
+
+<!-- Modal Map -->
+<div class="modal fade" id="modalMap" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Seleccionar una ubicación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+          <div class="form-group">
+              <label for="pac-input" class="bmd-label-floating">Buscar ubicación</label>
+              <input type="text" class="form-control" id="pac-input" placeholder="">
+          </div>
+
+        <div id="map" style="width:100%;height:400px;"></div>
+        
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" id="btnUpdate" class="btn btn-primary">Seleecionar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- End Modal Map -->
+

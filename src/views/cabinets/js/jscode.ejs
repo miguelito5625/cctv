@@ -1,7 +1,6 @@
-
-
 <script>
     $(document).ready(function () {
+        jQuery("time.timeago").timeago();
 
         //get a reference to the element
         var btnAdd = document.getElementById('btnAdd');
@@ -47,7 +46,20 @@
                 {
                     "targets": [0],
                     "visible": false
+                },
+                {
+                    "targets": [4],
+                    "render": function (data, type, row, meta) {
+                        return jQuery.timeago(data);
                 }
+                },
+                {
+                    "targets": [5],
+                    "render": function (data, type, row, meta) {
+                        return jQuery.timeago(data);
+                } 
+                }
+
             ]
 
         });
@@ -102,7 +114,8 @@
                 data: {
                     'identificador': txtIdentifier.value,
                     'ubicacion': txtLocation.value,
-                    'coordenadas': txtCoordinates.value
+                    'latitud': document.getElementById("latitud").value,
+                    'longitud': document.getElementById("longitud").value
                 },
                 success: function (response) {
                     // you will get response from your php page (what you echo or print) 
@@ -175,7 +188,8 @@
                     'id': row_array[0],
                     'identificador': document.getElementById("editTxtIdentifier").value,
                     'ubicacion': document.getElementById("editTxtLocation").value,
-                    'coordenadas': document.getElementById("editTxtCoordinates").value
+                    'latitud': document.getElementById("latitud").value,
+                    'longitud': document.getElementById("longitud").value
                 },
                 success: function (response) {
                     // you will get response from your php page (what you echo or print)                 
@@ -310,10 +324,4 @@
 
     });//End documente ready
 
-
-
-
 </script>
-
-<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZ6jl9RJQsJWwTVwLu0k300oy8DIvxIJY&callback=initMap&libraries=places" async defer></script> -->
-<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZ6jl9RJQsJWwTVwLu0k300oy8DIvxIJY&libraries=places&callback=initMap"></script> -->

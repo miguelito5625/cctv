@@ -12,7 +12,7 @@ cabinetsController.cabinetList = (req, res) => {
 
   req.getConnection((err, conn) => {
 
-    conn.query('SELECT * FROM Gabinete', (err, Gabinetes) => {
+    conn.query('SELECT * FROM view_Gabinete', (err, Gabinetes) => {
 
       if (err) {
         res.json(err);
