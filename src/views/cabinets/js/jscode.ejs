@@ -26,6 +26,11 @@
 
         });
 
+        $('#editTxtCoordinates').click(function (e) {
+            $('#modalMap').modal('show');
+
+        });
+
         $('#tableCabinets').DataTable({
             ajax: {
                 url: "/cabinets/list",
@@ -175,6 +180,9 @@
             document.getElementById("editTxtLocation").value = row_array[2];
             document.getElementById("editTxtCoordinates").value = row_array[3];
 
+            document.getElementById("editTxtLatitude").value = row_array[3].substring(0, row_array[3].indexOf(','));
+            document.getElementById("editTxtLongitude").value = row_array[3].substring(row_array[3].indexOf(',')+1,row_array[3].length);
+
 
         });//End clic listener btn edit
 
@@ -188,8 +196,8 @@
                     'id': row_array[0],
                     'identificador': document.getElementById("editTxtIdentifier").value,
                     'ubicacion': document.getElementById("editTxtLocation").value,
-                    'latitud': document.getElementById("latitud").value,
-                    'longitud': document.getElementById("longitud").value
+                    'latitud': document.getElementById("editTxtLatitude").value,
+                    'longitud': document.getElementById("editTxtLongitude").value
                 },
                 success: function (response) {
                     // you will get response from your php page (what you echo or print)                 

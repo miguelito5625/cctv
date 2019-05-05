@@ -140,12 +140,12 @@
                      var getCoordinates = location.lat() + ',' + location.lng();
                      
      
-     
-     
                      document.getElementById("latitud").value = location.lat();
                      document.getElementById("longitud").value = location.lng();
+                     document.getElementById("editTxtLatitude").value = location.lat();
+                     document.getElementById("editTxtLongitude").value = location.lng();
                      document.getElementById("txtCoordinates").value = getCoordinates;
-                     // document.getElementById("idlongitud").value = location.lng();
+                     document.getElementById("editTxtCoordinates").value = getCoordinates;
      
                  }
      
