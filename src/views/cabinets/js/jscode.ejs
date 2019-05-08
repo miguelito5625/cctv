@@ -4,20 +4,12 @@
 
         btnEdit.disabled = true;
         btnDelete.disabled = true;
+        btnState.disabled = true;
+        // document.getElementById("btnState").innerHTML = 'Lock';
         const socket = io();
 
         //temporalmente se guarda el registro de la fila seleccionada
         var row_array;
-
-        $('#txtCoordinates').click(function (e) {
-            $('#modalMap').modal('show');
-
-        });
-
-        $('#editTxtCoordinates').click(function (e) {
-            $('#modalMap').modal('show');
-
-        });
 
         $('#tableCabinets').DataTable({
             ajax: {
@@ -62,9 +54,7 @@
 
         });
 
-
         var table = $('#tableCabinets').DataTable();
-
 
         $('#tableCabinets tbody').on('click', 'tr', function () {
 
@@ -89,19 +79,27 @@
 
         }); //fin evento click de la tabla
 
+        //Event click to open modal with map
+        $('#txtCoordinates').click(function (e) {
+            $('#modalMap').modal('show');
 
-        //add event listener
+        });
+
+        //Event click to open modal with map to edit coordinates
+        $('#editTxtCoordinates').click(function (e) {
+            $('#modalMap').modal('show');
+
+        });
+
+        //add event to open modal with Add form
         $('#btnAdd').click(function (e) {
 
             $('#modalSave').modal('show');
 
         });
 
-        //add event listener
+        //add event listener to save new entry
         $('#btnSave').click(function (e) {
-
-            //   console.log(txtmail.value);
-            //   console.log(txtpassword.value);
 
             $.ajax({
                 url: "/cabinets/add",
@@ -155,13 +153,11 @@
                 }
             });
 
-
-
-
             $('#modalSave').modal('hide');
 
         });//End clic listener btn save
 
+        //Event click to open modal to edit data form
         $('#btnEdit').click(function (e) {
 
             $('#modalEditRow').modal('show');
@@ -207,8 +203,6 @@
 
                     }
 
-
-
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     // console.log(textStatus, errorThrown);
@@ -224,8 +218,7 @@
 
         });
 
-
-
+        //event click to delete data in the table
         $('#btnDelete').click(function (e) {
 
             $.ajax({
@@ -259,8 +252,6 @@
 
             $('#tableCabinets').DataTable().ajax.reload();
 
-
-
             $.notify("Hay un nuevo registro", {
                 animate: {
                     enter: 'animated fadeInRight',
@@ -282,8 +273,6 @@
 
             $('#tableCabinets').DataTable().ajax.reload();
 
-
-
             $.notify("Se elimino un registro", {
                 animate: {
                     enter: 'animated fadeInRight',
@@ -303,8 +292,6 @@
         socket.on('notify:update', function (data) {
 
             $('#tableCabinets').DataTable().ajax.reload();
-
-
 
             $.notify("Se actualizo un registro", {
                 animate: {
