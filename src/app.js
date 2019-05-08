@@ -28,7 +28,7 @@ app.set('view engine', 'ejs');
 // middlewares
 //app.use(morgan('dev'));
 app.use(myConnection(mysql, {
-  host: '35.185.125.18',
+  host: '34.90.169.49',
   user: 'desarrollador',
   password: 'mariobross5625',
   port: 3306,

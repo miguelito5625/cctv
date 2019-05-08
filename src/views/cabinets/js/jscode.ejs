@@ -34,7 +34,7 @@
         $('#tableCabinets').DataTable({
             ajax: {
                 url: "/cabinets/list",
-                type: "get",
+                type: "post",
                 dataSrc: "Gabinetes"
             },
             columns: [
@@ -43,8 +43,13 @@
                 { data: "ubicacion" },
                 { data: "coordenadas" },
                 { data: "updated_at" },
-                { data: "created_at" }
+                { data: "created_at" },
+                { data: "estado" }
             ],
+
+            language : {
+                "url": "https://wifinet.ga/json/datatables-es.json"
+            },
 
             //Ocultar columna
             "columnDefs": [
