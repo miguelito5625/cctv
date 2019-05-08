@@ -2,20 +2,8 @@
     $(document).ready(function () {
         jQuery("time.timeago").timeago();
 
-        //get a reference to the element
-        var btnAdd = document.getElementById('btnAdd');
-        var btnEdit = document.getElementById('btnEdit');
         btnEdit.disabled = true;
-        var btnDelete = document.getElementById('btnDelete');
         btnDelete.disabled = true;
-        var btnSave = document.getElementById('btnSave');
-
-        var btnUpdate = document.getElementById('btnUpdate');
-
-        var txtIdentifier = document.getElementById('txtIdentifier');
-        var txtLocation = document.getElementById('txtLocation');
-        var txtCoordinates = document.getElementById('txtCoordinates');
-
         const socket = io();
 
         //temporalmente se guarda el registro de la fila seleccionada
@@ -47,7 +35,7 @@
                 { data: "estado" }
             ],
 
-            language : {
+            language: {
                 "url": "https://wifinet.ga/json/datatables-es.json"
             },
 
@@ -61,13 +49,13 @@
                     "targets": [4],
                     "render": function (data, type, row, meta) {
                         return jQuery.timeago(data);
-                }
+                    }
                 },
                 {
                     "targets": [5],
                     "render": function (data, type, row, meta) {
                         return jQuery.timeago(data);
-                } 
+                    }
                 }
 
             ]
@@ -103,17 +91,14 @@
 
 
         //add event listener
-        btnAdd.addEventListener('click', function (event) {
+        $('#btnAdd').click(function (e) {
 
-            //$('#tableCabinets').DataTable().ajax.reload();
             $('#modalSave').modal('show');
-            // $('#modalMap').modal('show');
-
 
         });
 
         //add event listener
-        btnSave.addEventListener('click', function (event) {
+        $('#btnSave').click(function (e) {
 
             //   console.log(txtmail.value);
             //   console.log(txtpassword.value);
@@ -122,8 +107,8 @@
                 url: "/cabinets/add",
                 type: "post",
                 data: {
-                    'identificador': txtIdentifier.value,
-                    'ubicacion': txtLocation.value,
+                    'identificador': document.getElementById("txtIdentifier").value,
+                    'ubicacion': document.getElementById("txtLocation").value,
                     'latitud': document.getElementById("latitud").value,
                     'longitud': document.getElementById("longitud").value
                 },
@@ -177,7 +162,7 @@
 
         });//End clic listener btn save
 
-        btnEdit.addEventListener('click', function (event) {
+        $('#btnEdit').click(function (e) {
 
             $('#modalEditRow').modal('show');
 
@@ -186,13 +171,13 @@
             document.getElementById("editTxtCoordinates").value = row_array[3];
 
             document.getElementById("editTxtLatitude").value = row_array[3].substring(0, row_array[3].indexOf(','));
-            document.getElementById("editTxtLongitude").value = row_array[3].substring(row_array[3].indexOf(',')+1,row_array[3].length);
+            document.getElementById("editTxtLongitude").value = row_array[3].substring(row_array[3].indexOf(',') + 1, row_array[3].length);
 
 
         });//End clic listener btn edit
 
         //update event listener
-        btnUpdate.addEventListener('click', function (event) {
+        $('#btnUpdate').click(function (e) {
 
             $.ajax({
                 url: "/cabinets/update",
@@ -241,7 +226,7 @@
 
 
 
-        btnDelete.addEventListener('click', function (event) {
+        $('#btnDelete').click(function (e) {
 
             $.ajax({
                 url: "/cabinets/delete",
