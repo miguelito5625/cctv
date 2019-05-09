@@ -71,28 +71,36 @@ io.on('connection', (socket) => {
 
   //console.log('new connection');
 
-  socket.on('notify:insert', (data) => {
+  socket.on('notify:cabinetInsert', (data) => {
 
-    //console.log('Se inserto algo');
+    console.log('Se inserto un gabinete');
 
-    io.sockets.emit('notify:insert');
-
-  });
-
-
-  socket.on('notify:delete', (data) => {
-
-    console.log('Se borro algo');
-
-    io.sockets.emit('notify:delete');
+    io.sockets.emit('notify:cabinetInsert');
 
   });
 
-  socket.on('notify:update', (data) => {
 
-    console.log('Se actualizo algo');
+  socket.on('notify:cabinetDelete', (data) => {
 
-    io.sockets.emit('notify:update');
+    console.log('Se borro un gabinete');
+
+    io.sockets.emit('notify:cabinetDelete');
+
+  });
+
+  socket.on('notify:cabinetUpdate', (data) => {
+
+    console.log('Se actualizo un gabinete');
+
+    io.sockets.emit('notify:cabinetUpdate');
+
+  });
+
+  socket.on('notify:cabinetStateUpdate', (data) => {
+
+    console.log('Se cambio el estado de un gabinete');
+
+    io.sockets.emit('notify:cabinetStateUpdate');
 
   });
 

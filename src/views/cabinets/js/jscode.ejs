@@ -1,12 +1,13 @@
 <script>
     $(document).ready(function () {
+
         jQuery("time.timeago").timeago();
 
         btnEdit.disabled = true;
         btnDelete.disabled = true;
         btnState.disabled = true;
         // document.getElementById("btnState").innerHTML = 'Lock';
-        const socket = io();
+        // const socket = io();
 
         //temporalmente se guarda el registro de la fila seleccionada
         var row_array;
@@ -58,21 +59,34 @@
 
         $('#tableCabinets tbody').on('click', 'tr', function () {
 
+            row_array = Array.from(Object.keys(table.row(this).data()), k => table.row(this).data()[k]);
+
             if ($(this).hasClass('selected')) {
                 $(this).removeClass('selected');
 
                 btnEdit.disabled = true;
                 btnDelete.disabled = true;
+                btnState.disabled = true;
+                document.getElementById("btnState").innerHTML = 'Activar/Desactivar';
+
             }
             else {
                 table.$('tr.selected').removeClass('selected');
                 $(this).addClass('selected');
                 btnEdit.disabled = false;
                 btnDelete.disabled = false;
+                btnState.disabled = false;
+
+                //Validar si el estado de la fila esta activo o no y cambiar el texto del boton
+                if (row_array[4] == 'Activo') {
+                    document.getElementById("btnState").innerHTML = 'Desactivar';
+                } else {
+                    document.getElementById("btnState").innerHTML = 'Activar';
+                }
 
             }
 
-            row_array = Array.from(Object.keys(table.row(this).data()), k => table.row(this).data()[k]);
+
 
             // console.log( row_array );
 
@@ -129,7 +143,7 @@
                     }
 
                     if (response == 'ok') {
-                        socket.emit('notify:insert');
+                        socket.emit('notify:cabinetInsert');
                     }
 
                     console.log(response);
@@ -210,7 +224,7 @@
 
             });
 
-            socket.emit('notify:update');
+            socket.emit('notify:cabinetUpdate');
             btnDelete.disabled = true;
             btnEdit.disabled = true;
             $('#modalEditRow').modal('hide');
@@ -238,74 +252,60 @@
                 }
             });
 
-            socket.emit('notify:delete');
+            socket.emit('notify:cabinetDelete');
             btnDelete.disabled = true;
             btnEdit.disabled = true;
 
         });//End clic listener btn delete
 
 
+        //Event click to open modal to question if has been actived of disable
+        $('#btnState').click(function (e) {
+
+            swal({
+                title: "¿Esta seguro de cambiar el estado del registro?",
+                icon: "info",
+                buttons: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+
+                        $.ajax({
+                            url: "/cabinets/state",
+                            type: "post",
+                            data: {
+                                'id': row_array[0]
+                            },
+                            success: function (response) {
+                                console.log(response);
+                                if (response == 'ok') {
+                                    socket.emit('notify:cabinetStateUpdate');
+                                    swal("Se ha cambiado el estado correctamente!", {
+                                        icon: "success",
+                                    });
+                                } else {
+                                    swal("oh no!", "La operación ha fallado", "error");
+                                }
 
 
-        // Conexion del socket
-        socket.on('notify:insert', function (data) {
-
-            $('#tableCabinets').DataTable().ajax.reload();
-
-            $.notify("Hay un nuevo registro", {
-                animate: {
-                    enter: 'animated fadeInRight',
-                    exit: 'animated zoomOutUp'
-                }
-            });
-
-            setTimeout(function () {
-                $.notifyClose();
-            }, 2200);
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                // console.log(textStatus, errorThrown);
+                                swal("oh no!", "La operacion ha fallado2", "error");
+                            }
+                        });
 
 
-        });//End socket notify insert
+                    } else {
+                        swal("Esta bien, no se realizo ningun cambio");
+                    }
+                });
+
+        });//End event click modal question
 
 
 
-        // se activa el socket cuando ocurre una eliminacion
-        socket.on('notify:delete', function (data) {
-
-            $('#tableCabinets').DataTable().ajax.reload();
-
-            $.notify("Se elimino un registro", {
-                animate: {
-                    enter: 'animated fadeInRight',
-                    exit: 'animated zoomOutUp'
-                },
-                type: 'danger'
-            });
-
-            setTimeout(function () {
-                $.notifyClose();
-            }, 2200);
-
-        });//End socket notify delete
-
-
-        // se activa el socket cuando ocurre un update
-        socket.on('notify:update', function (data) {
-
-            $('#tableCabinets').DataTable().ajax.reload();
-
-            $.notify("Se actualizo un registro", {
-                animate: {
-                    enter: 'animated fadeInRight',
-                    exit: 'animated zoomOutUp'
-                }
-                // type: 'info'
-            });
-
-            setTimeout(function () {
-                $.notifyClose();
-            }, 2200);
-
-        });//End socket notify update
+       
 
     });//End documente ready
 

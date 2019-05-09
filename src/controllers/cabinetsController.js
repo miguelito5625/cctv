@@ -88,4 +88,22 @@ cabinetsController.cabinetDelete = (req, res) => {
   });
 }
 
+cabinetsController.cabinetState = (req, res) => {
+  const data = req.body;
+  req.getConnection((err, connection) => {
+    connection.query('call cambiar_estado_gabinete(?)', data.id, (err, rows) => {
+      
+      if(err){
+        console.log('error on state change');
+        res.send('error');
+
+      }else{
+        console.log('ok state changed');
+        res.send('ok');
+      }
+      
+    });
+  });
+}
+
 module.exports = cabinetsController;
