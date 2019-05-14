@@ -21,7 +21,7 @@
         // Conexion del socket
         socket.on('notify:cabinetInsert', function (data) {
 
-            $('#tableCabinets').DataTable().ajax.reload();
+            $('#indexTable').DataTable().ajax.reload();
 
             $.notify("Hay un nuevo gabinete", {
                 animate: {
@@ -42,7 +42,7 @@
         // se activa el socket cuando ocurre una eliminacion
         socket.on('notify:cabinetDelete', function (data) {
 
-            $('#tableCabinets').DataTable().ajax.reload();
+            $('#indexTable').DataTable().ajax.reload();
 
             $.notify("Se elimino un registro", {
                 animate: {
@@ -62,7 +62,7 @@
         // se activa el socket cuando ocurre un update
         socket.on('notify:cabinetUpdate', function (data) {
 
-            $('#tableCabinets').DataTable().ajax.reload();
+            $('#indexTable').DataTable().ajax.reload();
 
             $.notify("Se actualizo un registro", {
                 animate: {
@@ -81,9 +81,30 @@
         // se activa el socket cuando ocurre un cambio de estado del gabinete
         socket.on('notify:cabinetStateUpdate', function (data) {
 
-            $('#tableCabinets').DataTable().ajax.reload();
+            $('#indexTable').DataTable().ajax.reload();
 
             $.notify("Se cambio el estado de un gabinete", {
+                animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated zoomOutUp'
+                }
+                // type: 'info'
+            });
+
+            setTimeout(function () {
+                $.notifyClose();
+            }, 2200);
+
+        });//End socket notify update
+
+        
+
+        // se activa el socket cuando se ingreso un nuevo dispositivo
+        socket.on('notify:deviceInsert', function (data) {
+
+            $('#indexTable').DataTable().ajax.reload();
+
+            $.notify("Se ha insertado un nuevo dispositivo", {
                 animate: {
                     enter: 'animated fadeInRight',
                     exit: 'animated zoomOutUp'

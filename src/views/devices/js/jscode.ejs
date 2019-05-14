@@ -1,27 +1,147 @@
 <script>
     $(document).ready(function () {
 
+        // Inicializacion de librerias
         jQuery("time.timeago").timeago();
 
+        $('#modalNewDevice').modal('show');
+
+        // ////////////////////// Variables globales y funciones ///////////////////////////////////////////////////
         btnEdit.disabled = true;
         btnDelete.disabled = true;
         btnState.disabled = true;
-        // document.getElementById("btnState").innerHTML = 'Lock';
-        // const socket = io();
 
         //temporalmente se guarda el registro de la fila seleccionada
         var row_array;
 
-        $('#indexTable').DataTable({
-            ajax: {
+        function clearListCabinets() {
+            for (i = selectCabinets.options.length - 1; i >= 0; i--) {
+                selectCabinets.remove(i);
+            }
+        }
+
+        function clearListTypeDevices() {
+            for (i = selectTypeDevices.options.length - 1; i >= 0; i--) {
+                selectTypeDevices.remove(i);
+            }
+        }
+
+        function clearListBrands() {
+            for (i = selectBrands.options.length - 1; i >= 0; i--) {
+                selectBrands.remove(i);
+            }
+        }
+
+        function loadAjaxBrands() {
+
+            $.ajax({
+                url: "/devices/brandlist",
+                type: "get",
+                success: function (response) {
+                    clearListBrands();
+                    var options = response.Marca;
+
+                    for (var i = 0; i < options.length; i++) {
+                        var option = options[i];
+                        var texto = option.marca;
+                        document.getElementById("selectBrands").options.add(new Option(texto, option.id));
+                    }
+
+                    $('#selectBrands').selectpicker('refresh');
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // console.log(textStatus, errorThrown);
+                }
+
+            });
+
+        }
+
+
+        function loadAjaxtypeDevices() {
+
+            $.ajax({
+                url: "/devices/typedevicelist",
+                type: "get",
+                success: function (response) {
+                    clearListTypeDevices();
+                    var options = response.tipoDispositivo;
+
+                    for (var i = 0; i < options.length; i++) {
+                        var option = options[i];
+                        var texto = option.dispositivo;
+                        document.getElementById("selectTypeDevices").options.add(new Option(texto, option.id));
+                    }
+
+                    $('#selectTypeDevices').selectpicker('refresh');
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // console.log(textStatus, errorThrown);
+                }
+
+            });
+
+        }
+
+
+        function loadAjaxCabinets() {
+
+            $.ajax({
                 url: "/cabinets/list",
                 type: "post",
-                dataSrc: "Gabinetes"
+                success: function (response) {
+                    clearListCabinets();
+                    // console.log(response.Gabinetes[0].id);
+                    var options = response.Gabinetes;
+                    // console.log(options);
+
+                    for (var i = 0; i < options.length; i++) {
+                        var option = options[i];
+                        var texto = option.identificador + ", " + option.ubicacion;
+                        document.getElementById("selectCabinets").options.add(new Option(texto, option.id));
+                    }
+
+                    $('#selectCabinets').selectpicker('refresh');
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // console.log(textStatus, errorThrown);
+                }
+
+            });
+
+        }
+
+
+        //event al cambiar la seleccion de la lista de gabinetes
+        selectCabinets.onchange = function () {
+            console.log(selectCabinets.value);
+        }
+
+        /////////////////// Codigo ejecutable ////////////////////////////////////////////////////////////////////
+
+        loadAjaxCabinets();
+        loadAjaxtypeDevices();
+        loadAjaxBrands();
+
+
+
+        $('#indexTable').DataTable({
+            ajax: {
+                url: "/devices/list",
+                type: "post",
+                dataSrc: "Dispositivos"
             },
             columns: [
                 { data: "id" },
-                { data: "identificador" },
-                { data: "ubicacion" },
+                { data: "dispositivo" },
+                { data: "marca" },
+                { data: "modelo" },
+                { data: "n_serie" },
+                { data: "identificador_gabinete" },
+                { data: "descripcion" },
                 {
                     data: "coordenadas",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
@@ -44,13 +164,13 @@
                     "visible": false
                 },
                 {
-                    "targets": [4],
+                    "targets": [8],
                     "render": function (data, type, row, meta) {
                         return jQuery.timeago(data);
                     }
                 },
                 {
-                    "targets": [5],
+                    "targets": [9],
                     "render": function (data, type, row, meta) {
                         return jQuery.timeago(data);
                     }
@@ -59,7 +179,7 @@
             ]
 
         });
- 
+
         var table = $('#indexTable').DataTable();
 
         $('#indexTable tbody').on('click', 'tr', function () {
@@ -83,11 +203,11 @@
                 btnState.disabled = false;
 
                 //Validar si el estado de la fila esta activo o no y cambiar el texto del boton
-                if (row_array[4] == 'Activo') {
-                    document.getElementById("btnState").innerHTML = 'Desactivar';
-                } else {
-                    document.getElementById("btnState").innerHTML = 'Activar';
-                }
+                // if (row_array[4] == 'Activo') {
+                //     document.getElementById("btnState").innerHTML = 'Desactivar';
+                // } else {
+                //     document.getElementById("btnState").innerHTML = 'Activar';
+                // }
 
             }
 
@@ -97,6 +217,63 @@
 
 
         }); //fin evento click de la tabla
+
+
+
+
+        $('#btnOpenModalNewTypeDivece').click(function (e) {
+
+            $('#modalNewTypeDivice').modal('show');
+
+        });
+
+        $('#btnOpenModalNewBrand').click(function (e) {
+
+            $('#modalNewBrand').modal('show');
+
+        });
+
+
+        //Evento click para recargar los gabinetes con ajax
+        $('#btnRefreshCabinets').click(function (e) {
+
+            loadAjaxCabinets();
+
+            $('#btnRefreshCabinets').removeClass().addClass('btn btn-primary flip' + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                $(this).removeClass();
+                $(this).toggleClass("btn btn-primary");
+            });
+
+        });
+
+        //Evento click para recargar los tipos de dispositivos con ajax
+        $('#btnRefreshTypeDevices').click(function (e) {
+
+            loadAjaxtypeDevices();
+
+            $('#btnRefreshTypeDevices').removeClass().addClass('btn btn-primary flip' + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                $(this).removeClass();
+                $(this).toggleClass("btn btn-primary");
+            });
+
+        });
+
+
+        //Evento click para recargar la lista de marcas con ajax
+        $('#btnRefreshBrands').click(function (e) {
+
+            loadAjaxBrands();
+
+            $('#btnRefreshBrands').removeClass().addClass('btn btn-primary flip' + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                $(this).removeClass();
+                $(this).toggleClass("btn btn-primary");
+            });
+
+        });
+
+
+
+
 
         //Event click to open modal with map
         $('#txtCoordinates').click(function (e) {
@@ -113,24 +290,82 @@
         //add event to open modal with Add form
         $('#btnAdd').click(function (e) {
 
-            $('#modalSave').modal('show');
+            $('#modalNewDevice').modal('show');
 
         });
 
-        //add event listener to save new entry
-        $('#btnSave').click(function (e) {
+        //add event listener to save new entry brand
+        $('#btnSaveNewBrand').click(function (e) {
 
             $.ajax({
-                url: "/cabinets/add",
+                url: "/devices/addnewbrand",
                 type: "post",
                 data: {
-                    'identificador': document.getElementById("txtIdentifier").value,
-                    'ubicacion': document.getElementById("txtLocation").value,
-                    'latitud': document.getElementById("latitud").value,
-                    'longitud': document.getElementById("longitud").value
+                    'marca': document.getElementById("txtNewBrand").value
                 },
                 success: function (response) {
-                    // you will get response from your php page (what you echo or print) 
+                    console.log(response);
+                    loadAjaxBrands();
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+
+
+                }
+            });
+
+            $('#modalNewBrand').modal('hide');
+
+
+
+        });//End clic listener btn save new brand
+
+        //add event listener to save new entry type divice
+        $('#btnSaveNewTypeDivice').click(function (e) {
+
+            $.ajax({
+                url: "/devices/addnewtypedivice",
+                type: "post",
+                data: {
+                    'dispositivo': document.getElementById("txtNewTypeDivice").value
+                },
+                success: function (response) {
+                    console.log(response);
+                    loadAjaxtypeDevices();
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+
+
+                }
+            });
+
+            $('#modalNewTypeDivice').modal('hide');
+
+
+
+        });//End clic listener btn save new type device
+
+
+        //add event listener to save new entry
+        $('#btnSaveDevice').click(function (e) {
+
+            $.ajax({
+                url: "/devices/add",
+                type: "post",
+                data: {
+                    'modelo': document.getElementById("txtModel").value,
+                    'n_serie': document.getElementById("txtSerialNumber").value,
+                    'descripcion': document.getElementById("txtDescription").value,
+                    'id_tipoDispositivo': document.getElementById("selectTypeDevices").value,
+                    'id_marca': document.getElementById("selectBrands").value,
+                    'id_gabinete': document.getElementById("selectCabinets").value                    
+                },
+                success: function (response) {
+
+                    console.log(response);
 
                     if (response == 'error') {
                         $.notify("Ha ocurrido un error", {
@@ -148,16 +383,16 @@
                     }
 
                     if (response == 'ok') {
-                        socket.emit('notify:cabinetInsert');
+                        socket.emit('notify:deviceInsert');
                     }
 
-                    console.log(response);
+                    
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     // console.log(textStatus, errorThrown);
 
-                    $.notify("Ha ocurrido un error", {
+                    $.notify("Ha ocurrido un error en el ajax", {
                         animate: {
                             enter: 'animated fadeInRight',
                             exit: 'animated zoomOutUp'
@@ -172,7 +407,8 @@
                 }
             });
 
-            $('#modalSave').modal('hide');
+            $('#modalNewDevice').modal('hide');
+
 
         });//End clic listener btn save
 

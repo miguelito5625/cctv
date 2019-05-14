@@ -17,7 +17,7 @@ const app = express();
 
 // importing routes
 const cabinetsRoutes = require('./routes/cabinetsRoutes');
-const camsRoutes = require('./routes/camsRoutes');
+const devicesRoutes = require('./routes/devicesRoutes');
 
 // settings
 app.set('port', process.env.PORT || 443);
@@ -42,7 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 app.use('/', cabinetsRoutes);
-app.use('/', camsRoutes);
+app.use('/', devicesRoutes);
 // app.use(function(req, res, next) {
 //   res.status(404).render('404/index');
 // });
@@ -104,5 +104,13 @@ io.on('connection', (socket) => {
 
   });
 
+
+  socket.on('notify:deviceInsert', (data) => {
+
+    console.log('Se ingreso un nuevo dispositivo');
+
+    io.sockets.emit('notify:deviceInsert');
+
+  });
 
 });

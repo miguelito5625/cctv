@@ -1,0 +1,265 @@
+<!-- Modals -->
+
+
+<!-- Modal new entry -->
+<div class="modal fade" id="modalNewDevice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Registrar Dispositivo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form>
+
+          <div class="form-group">
+            <label for="txtCoordinates">Dispositivo</label>
+            <div class="row">
+              <div class="col-sm-12 col-md-8 col-lg-8" style="margin-top: 15px">
+                <select id="selectTypeDevices" class="selectpicker form-control" data-size="5" data-live-search="true">
+                </select>
+              </div>
+
+              <div class="text-center col-sm-12 col-md-2 col-lg-2" style="margin-top: 15px">
+                <button type="button" id="btnOpenModalNewTypeDivece" class="btn btn-primary"
+                  style="width: 40px; height: 40px; padding: 6px 6px 6px 6px; font-size: 18px; line-height: 1.33; border-radius: 25px;"><i
+                    class="material-icons md-68">add</i></button>
+              </div>
+
+              <div class="text-center col-sm-12 col-md-2 col-lg-2" style="margin-top: 15px">
+                <button type="button" id="btnRefreshTypeDevices" class="btn btn-primary"
+                  style="width: 40px; height: 40px; padding: 6px 6px 6px 6px; font-size: 18px; line-height: 1.33; border-radius: 25px;"><i
+                    class="material-icons md-68">refresh</i></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="txtCoordinates">Marca</label>
+            <div class="row">
+              <div class="col-sm-12 col-md-8 col-lg-8" style="margin-top: 15px">
+                <select id="selectBrands" class="selectpicker form-control" data-size="5" data-live-search="true">
+                </select>
+              </div>
+
+              <div class="text-center col-sm-12 col-md-2 col-lg-2" style="margin-top: 15px">
+                <button type="button" id="btnOpenModalNewBrand" class="btn btn-primary"
+                  style="width: 40px; height: 40px; padding: 6px 6px 6px 6px; font-size: 18px; line-height: 1.33; border-radius: 25px;"><i
+                    class="material-icons md-68">add</i></button>
+              </div>
+
+              <div class="text-center col-sm-12 col-md-2 col-lg-2" style="margin-top: 15px">
+                <button type="button" id="btnRefreshBrands" class="btn btn-primary"
+                  style="width: 40px; height: 40px; padding: 6px 6px 6px 6px; font-size: 18px; line-height: 1.33; border-radius: 25px;"><i
+                    class="material-icons md-68">refresh</i></button>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="txtModel">Modelo</label>
+            <input type="text" id="txtModel" class="form-control" placeholder="Ingresar el modelo del dispostivo">
+          </div>
+
+          <div class="form-group">
+            <label for="txtSerialNumber">Numero de serie</label>
+            <input type="text" id="txtSerialNumber" class="form-control" placeholder="Ingresar el numero de serie del dispostivo">
+          </div>
+
+          <div class="form-group">
+            <label for="txtDescription">Descripción</label>
+            <textarea type="text" id="txtDescription" class="form-control" placeholder="Opcional"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="txtCoordinates">Gabinete</label>
+            <div class="row">
+              <div class="col-sm-12 col-md-10 col-lg-10" style="margin-top: 15px">
+                <select id="selectCabinets" class="selectpicker form-control" data-size="5" data-live-search="true">
+                  <!-- <option data-tokens="ketchup mustard">Hot Dog, Fries and a Soda</option>
+                      <option data-tokens="mustard">Burger, Shake and a Smile</option>
+                      <option data-tokens="frosting">Sugar, Spice and all things nice</option> -->
+                </select>
+              </div>
+              <div class="text-center col-sm-12 col-md-2 col-lg-2" style="margin-top: 15px">
+                <button type="button" id="btnRefreshCabinets" class="btn btn-primary"
+                  style="width: 40px; height: 40px; padding: 6px 6px 6px 6px; font-size: 18px; line-height: 1.33; border-radius: 25px;"><i
+                    class="material-icons md-68">refresh</i></button>
+              </div>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" id="btnSaveDevice" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal new entry -->
+
+
+<!-- Modal new typeDevice -->
+<div class="modal fade" id="modalNewTypeDivice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Registrar nuevo tipo de dispositivo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form>
+
+         
+          <div class="form-group">
+            <label for="txtModel">Tipo de dispositivo</label>
+            <input type="text" id="txtNewTypeDivice" class="form-control" placeholder="Ingresar el nuevo tipo de dispostivo">
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" id="btnSaveNewTypeDivice" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal new typeDevice -->
+
+
+
+<!-- Modal new Brand -->
+<div class="modal fade" id="modalNewBrand" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Registrar una nueva marca</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form>
+
+         
+          <div class="form-group">
+            <label for="txtNewBrand">Marca</label>
+            <input type="text" id="txtNewBrand" class="form-control" placeholder="Ingresar el nombre de la marca">
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" id="btnSaveNewBrand" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal new Brand -->
+
+
+
+<!-- Modal edit row -->
+<div class="modal fade" id="modalEditRow" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar Gabinete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form>
+          <div class="form-group">
+            <label for="editTxtIdentifier">Identificador</label>
+            <input type="text" id="editTxtIdentifier" class="form-control"
+              placeholder="Ingresar el Identificador del gabinete">
+          </div>
+          <div class="form-group">
+            <label for="editTxtLocation">Ubicación</label>
+            <input type="text" id="editTxtLocation" class="form-control"
+              placeholder="Ingresar la Ubicación del gabinete">
+          </div>
+          <div class="form-group">
+            <label for="editTxtCoordinates">Coordenadas</label>
+            <input style="background-color: white;" type="text" id="editTxtCoordinates" class="form-control"
+              placeholder="Ingresar las Coordenadas del gabinete" readonly>
+          </div>
+
+          <input type="hidden" id="editTxtLatitude">
+          <input type="hidden" id="editTxtLongitude">
+
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" id="btnUpdate" class="btn btn-primary">Actualizar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal edit row -->
+
+
+
+<!-- Modal Map -->
+
+<style>
+  .pac-container {
+    z-index: 1100 !important;
+  }
+</style>
+
+<div class="modal fade" id="modalMap" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Seleccionar una ubicación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="form-group">
+          <label for="pac-input" class="bmd-label-floating">Buscar ubicación</label>
+          <input type="text" class="form-control" id="pac-input" placeholder="">
+        </div>
+
+        <div id="map" style="width:100%;height:400px;"></div>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- End Modal Map -->
