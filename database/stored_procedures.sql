@@ -1,5 +1,8 @@
 -- drop procedure if exists cambiar_estado_gabinete;
 
+DROP PROCEDURE IF EXISTS cambiar_estado_gabinete;
+
+
 DELIMITER //
 CREATE PROCEDURE cambiar_estado_gabinete(IN id_gabinete INT)
 BEGIN
@@ -16,4 +19,13 @@ select estado from Gabinete limit 1;
 END //
 DELIMITER ;
 
-call cambiar_estado_gabinete(1);
+
+DROP PROCEDURE IF EXISTS cambiar_estado_dispositivo;
+
+DELIMITER //
+CREATE PROCEDURE cambiar_estado_dispositivo(IN id_dispositivo INT, IN nuevo_estado VARCHAR(15))
+BEGIN
+UPDATE Dispositivo SET estado = nuevo_estado WHERE id = id_dispositivo;
+select estado from Dispositivo limit 1;
+END //
+DELIMITER ;

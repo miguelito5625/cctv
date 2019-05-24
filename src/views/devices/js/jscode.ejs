@@ -4,7 +4,7 @@
         // Inicializacion de librerias
         jQuery("time.timeago").timeago();
 
-        $('#modalNewDevice').modal('show');
+        // $('#modalNewDevice').modal('show');
 
         // ////////////////////// Variables globales y funciones ///////////////////////////////////////////////////
         btnEdit.disabled = true;
@@ -192,7 +192,7 @@
                 btnEdit.disabled = true;
                 btnDelete.disabled = true;
                 btnState.disabled = true;
-                document.getElementById("btnState").innerHTML = 'Activar/Desactivar';
+                // document.getElementById("btnState").innerHTML = 'Activar/Desactivar';
 
             }
             else {
@@ -361,7 +361,7 @@
                     'descripcion': document.getElementById("txtDescription").value,
                     'id_tipoDispositivo': document.getElementById("selectTypeDevices").value,
                     'id_marca': document.getElementById("selectBrands").value,
-                    'id_gabinete': document.getElementById("selectCabinets").value                    
+                    'id_gabinete': document.getElementById("selectCabinets").value
                 },
                 success: function (response) {
 
@@ -386,7 +386,7 @@
                         socket.emit('notify:deviceInsert');
                     }
 
-                    
+
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -503,44 +503,34 @@
         //Event click to open modal to question if has been actived of disable
         $('#btnState').click(function (e) {
 
-            swal({
-                title: "¿Esta seguro de cambiar el estado del registro?",
-                icon: "info",
-                buttons: true,
+                const { value: fruit } = Swal.fire({
+                title: 'Seleccione un estado',
+                input: 'select',
+                inputOptions: {
+                    'Activo': 'Activo',
+                    'Bodega': 'Bodega',
+                    'Dañado': 'Dañado',
+                    'Inactivo': 'Inactivo'
+                },
+                inputPlaceholder: 'Select a fruit',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    return new Promise((resolve) => {
+                        
+                        if (!value) {
+                            resolve('No ha seleccionado un estado!');
+                        }else{
+
+                            //Codigo ajax para cambiar estado
+                            console.log(value);
+                            resolve();
+
+                        }
+
+                    })
+                }
             })
-                .then((willDelete) => {
-                    if (willDelete) {
-
-                        $.ajax({
-                            url: "/cabinets/state",
-                            type: "post",
-                            data: {
-                                'id': row_array[0]
-                            },
-                            success: function (response) {
-                                console.log(response);
-                                if (response == 'ok') {
-                                    socket.emit('notify:cabinetStateUpdate');
-                                    swal("Se ha cambiado el estado correctamente!", {
-                                        icon: "success",
-                                    });
-                                } else {
-                                    swal("oh no!", "La operación ha fallado", "error");
-                                }
-
-
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                // console.log(textStatus, errorThrown);
-                                swal("oh no!", "La operacion ha fallado2", "error");
-                            }
-                        });
-
-
-                    } else {
-                        swal("Esta bien, no se realizo ningun cambio");
-                    }
-                });
+           
 
         });//End event click modal question
 

@@ -59,7 +59,7 @@
             ]
 
         });
- 
+
         var table = $('#indexTable').DataTable();
 
         $('#indexTable tbody').on('click', 'tr', function () {
@@ -120,59 +120,68 @@
         //add event listener to save new entry
         $('#btnSave').click(function (e) {
 
-            $.ajax({
-                url: "/cabinets/add",
-                type: "post",
-                data: {
-                    'identificador': document.getElementById("txtIdentifier").value,
-                    'ubicacion': document.getElementById("txtLocation").value,
-                    'latitud': document.getElementById("latitud").value,
-                    'longitud': document.getElementById("longitud").value
-                },
-                success: function (response) {
-                    // you will get response from your php page (what you echo or print) 
+            Swal.fire({
+                title: 'Guardando nuevo registro, espere...',
+                onBeforeOpen: () => {
+                    Swal.showLoading();
 
-                    if (response == 'error') {
-                        $.notify("Ha ocurrido un error", {
-                            animate: {
-                                enter: 'animated fadeInRight',
-                                exit: 'animated zoomOutUp'
-                            },
-                            type: 'danger'
-                        });
+                    return new Promise(function (resolve) {
+                        $.ajax({
+                            url: "/cabinets/add",
+                            type: "post",
+                            data: {
+                                'identificador': document.getElementById("txtIdentifier").value,
+                                'ubicacion': document.getElementById("txtLocation").value,
+                                'latitud': document.getElementById("latitud").value,
+                                'longitud': document.getElementById("longitud").value
+                            }
+                        })
+                            .done(function (response) {
 
-                        setTimeout(function () {
-                            $.notifyClose();
-                        }, 2200);
+                                console.log(response);
+                                Swal.close();
 
-                    }
+                                if (response == 'error') {
 
-                    if (response == 'ok') {
-                        socket.emit('notify:cabinetInsert');
-                    }
 
-                    console.log(response);
+                                    Swal.fire({
+                                        type: 'error',
+                                        title: 'Ha ocurrido un error en el servidor',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
 
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    // console.log(textStatus, errorThrown);
+                                }
 
-                    $.notify("Ha ocurrido un error", {
-                        animate: {
-                            enter: 'animated fadeInRight',
-                            exit: 'animated zoomOutUp'
-                        },
-                        type: 'danger'
+                                if (response == 'ok') {
+                                    socket.emit('notify:cabinetInsert');
+                                    $('#modalSave').modal('hide');
+                                    Swal.fire({
+                                        type: 'success',
+                                        title: 'Operacion realizada con exito',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
+
+                                }
+
+                            })
+                            .fail(function () {
+                                Swal.close();
+                                Swal.fire({
+                                    type: 'error',
+                                    title: 'Error en el servidor',
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                            });
                     });
 
-                    setTimeout(function () {
-                        $.notifyClose();
-                    }, 2200);
-
-                }
+                },
+                allowOutsideClick: false
             });
 
-            $('#modalSave').modal('hide');
+          
 
         });//End clic listener btn save
 
@@ -194,8 +203,14 @@
         //update event listener
         $('#btnUpdate').click(function (e) {
 
-            $.ajax({
-                url: "/cabinets/update",
+            Swal.fire({
+                title: 'modificando el registro, espere...',
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+
+                    return new Promise(function (resolve) {
+                        $.ajax({
+                            url: "/cabinets/update",
                 type: "post",
                 data: {
                     'id': row_array[0],
@@ -203,36 +218,57 @@
                     'ubicacion': document.getElementById("editTxtLocation").value,
                     'latitud': document.getElementById("editTxtLatitude").value,
                     'longitud': document.getElementById("editTxtLongitude").value
-                },
-                success: function (response) {
-                    // you will get response from your php page (what you echo or print)                 
-
-                    if (response == 'error') {
-                        $.notify("Ha ocurrido un error", {
-                            animate: {
-                                enter: 'animated fadeInRight',
-                                exit: 'animated zoomOutUp'
-                            },
-                            type: 'danger'
-                        });
-
-                        setTimeout(function () {
-                            $.notifyClose();
-                        }, 2200);
-
-                    }
-
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    // console.log(textStatus, errorThrown);
                 }
+                        })
+                            .done(function (response) {
 
+                                console.log(response);
+                                Swal.close();
+
+                                if (response == 'error') {
+
+
+                                    Swal.fire({
+                                        type: 'error',
+                                        title: 'Ha ocurrido un error en el servidor',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
+
+                                }
+
+                                if (response == 'ok') {
+                                    socket.emit('notify:cabinetUpdate');
+                                    $('#modalEditRow').modal('hide');
+                                    Swal.fire({
+                                        type: 'success',
+                                        title: 'Operacion realizada con exito',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
+
+                                }
+
+                            })
+                            .fail(function () {
+                                Swal.close();
+                                Swal.fire({
+                                    type: 'error',
+                                    title: 'Error en el servidor',
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                            });
+                    });
+
+                },
+                allowOutsideClick: false
             });
 
-            socket.emit('notify:cabinetUpdate');
+            // socket.emit('notify:cabinetUpdate');
             btnDelete.disabled = true;
             btnEdit.disabled = true;
-            $('#modalEditRow').modal('hide');
+            // $('#modalEditRow').modal('hide');
 
 
         });
@@ -267,44 +303,70 @@
         //Event click to open modal to question if has been actived of disable
         $('#btnState').click(function (e) {
 
-            swal({
-                title: "¿Esta seguro de cambiar el estado del registro?",
-                icon: "info",
-                buttons: true,
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: true,
             })
-                .then((willDelete) => {
-                    if (willDelete) {
 
+            swalWithBootstrapButtons.fire({
+                title: '¿Esta seguro de cambiar el estado del registro?',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Si',
+                cancelButtonText: 'No',
+                reverseButtons: true,
+                showLoaderOnConfirm: true,
+                preConfirm: function () {
+                    return new Promise(function (resolve) {
                         $.ajax({
                             url: "/cabinets/state",
                             type: "post",
                             data: {
                                 'id': row_array[0]
-                            },
-                            success: function (response) {
-                                console.log(response);
-                                if (response == 'ok') {
-                                    socket.emit('notify:cabinetStateUpdate');
-                                    swal("Se ha cambiado el estado correctamente!", {
-                                        icon: "success",
-                                    });
-                                } else {
-                                    swal("oh no!", "La operación ha fallado", "error");
-                                }
-
-
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                // console.log(textStatus, errorThrown);
-                                swal("oh no!", "La operacion ha fallado2", "error");
                             }
-                        });
+                        })
+                            .done(function (response) {
+                                document.getElementById("btnState").innerHTML = 'Activar/Desactivar';
+                                socket.emit('notify:cabinetStateUpdate');
+                                Swal.close();
+                                Swal.fire({
+                                    type: 'success',
+                                    title: 'Se ha cambiado el estado correctamente!',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                                // readProducts();
+                            })
+                            .fail(function () {
+                                Swal.close();
+                                Swal.fire({
+                                    type: 'error',
+                                    title: 'Error en el servidor',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            });
+                    });
+                },
+                allowOutsideClick: false
+            }).then((result) => {
 
+                if (result.dismiss === Swal.DismissReason.cancel) {
 
-                    } else {
-                        swal("Esta bien, no se realizo ningun cambio");
-                    }
-                });
+                    Swal.fire({
+                        type: 'success',
+                        title: 'Esta bien, no se realizo ningun cambio!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                }
+
+            });
+
 
         });//End event click modal question
 
