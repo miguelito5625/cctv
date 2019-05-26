@@ -162,6 +162,26 @@ controller.devicesDelete = (req, res) => {
 }
 
 
+ controller.deviceState = (req, res) => {
+  const data = req.body;
+  const id  = data.id;
+  const state = data.state;
+  req.getConnection((err, connection) => {
+    connection.query('call cambiar_estado_dispositivo(?,?)', [id, state], (err, rows) => {
+      
+      if(err){
+        console.log('error on state change');
+        res.send('error');
+
+      }else{
+        console.log('ok state changed');
+        res.send('ok');
+      }
+      
+    });
+  });
+}
+
 
 
 module.exports = controller;

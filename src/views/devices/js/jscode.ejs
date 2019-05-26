@@ -503,8 +503,8 @@
         //Event click to open modal to question if has been actived of disable
         $('#btnState').click(function (e) {
 
-                const { value: fruit } = Swal.fire({
-                title: 'Seleccione un estado',
+            const { value: fruit } = Swal.fire({
+                title: 'Cambiar estado del dispositivo',
                 input: 'select',
                 inputOptions: {
                     'Activo': 'Activo',
@@ -512,25 +512,61 @@
                     'Dañado': 'Dañado',
                     'Inactivo': 'Inactivo'
                 },
-                inputPlaceholder: 'Select a fruit',
+                inputPlaceholder: 'Seleccione un estado',
                 showCancelButton: true,
-                inputValidator: (value) => {
+                showLoaderOnConfirm: true,
+                allowOutsideClick: false,
+                preConfirm: (value) => {
                     return new Promise((resolve) => {
-                        
-                        if (!value) {
-                            resolve('No ha seleccionado un estado!');
-                        }else{
 
-                            //Codigo ajax para cambiar estado
-                            console.log(value);
-                            resolve();
+                        $.ajax({
+                            url: "/devices/state",
+                            type: "post",
+                            data: {
+                                'id': row_array[0],
+                                'state': value
+                            }
+                        }).done(function (response) {
+                            // document.getElementById("btnState").innerHTML = 'Activar/Desactivar';
+                            // socket.emit('notify:cabinetStateUpdate');
+                            $('#indexTable').DataTable().ajax.reload();
+                            Swal.close();
+                            Swal.fire({
+                                type: 'success',
+                                title: 'Se ha cambiado el estado correctamente!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                            // readProducts();
+                        })
+                            .fail(function () {
+                                Swal.close();
+                                Swal.fire({
+                                    type: 'error',
+                                    title: 'Error en el servidor',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            });
 
-                        }
 
                     })
                 }
-            })
-           
+            }).then((result) => {
+
+                if (result.dismiss === Swal.DismissReason.cancel) {
+
+                    Swal.fire({
+                        type: 'success',
+                        title: 'Esta bien, no se realizo ningun cambio!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                }
+
+            });
+
 
         });//End event click modal question
 

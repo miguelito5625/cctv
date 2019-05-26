@@ -13,6 +13,7 @@ router.post('/devices/addnewtypedivice', userController.devicesAddNewTypeDivice)
 router.post('/devices/addnewbrand', userController.devicesAddNewBrand);
 router.post('/devices/update', userController.devicesUpdate);
 router.post('/devices/delete', userController.devicesDelete);
+router.post('/devices/state', userController.deviceState);
 
 
 //router.post('/test', userController.test);
