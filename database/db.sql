@@ -27,17 +27,19 @@ FROM Gabinete;
 DROP table Dispositivo;
 CREATE TABLE Dispositivo(
   id INT NOT NULL AUTO_INCREMENT,
-  dispositivo varchar(50) NULL,
-  marca varchar(25) NULL,
   modelo varchar(25) NULL,
   n_serie varchar(25) NULL,
   descripcion varchar(150) NULL,
-  estado varchar(15) NULL,
+  id_tipoDispositivo INT NULL,
+  id_marca INT NULL,
   id_gabinete int NULL,
+  estado varchar(15) NULL,
   updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW(),
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   PRIMARY KEY(id),
-  CONSTRAINT fk_GabineteCamara FOREIGN KEY (id_gabinete) REFERENCES Gabinete(id)
+  CONSTRAINT fk_GabineteCamara FOREIGN KEY (id_gabinete) REFERENCES Gabinete(id),
+  CONSTRAINT fk_tipoDispositivo FOREIGN KEY (id_tipoDispositivo) REFERENCES Dispositivo(id),
+  CONSTRAINT fk_id_marca FOREIGN KEY (id_marca) REFERENCES Marca(id)
 );
 
 
