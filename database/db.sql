@@ -51,6 +51,29 @@ FROM Dispositivo
 INNER JOIN Gabinete ON Dispositivo.id_gabinete =  Gabinete.id;
 
 
+-- marca
+CREATE TABLE Marca(
+  id INT NOT NULL AUTO_INCREMENT,
+  marca varchar(25) NULL,
+  estado varchar(15) NULL, 
+  PRIMARY KEY(id)
+);
+
+
+-- tipoDispositivo
+CREATE TABLE tipoDispositivo(
+  id INT NOT NULL AUTO_INCREMENT,
+  dispositivo varchar(25) NULL,
+  estado varchar(15) NULL, 
+  PRIMARY KEY(id)
+);
+
+
+
+
+
+-- Pruebas
+
 drop table prueba;
 CREATE TABLE prueba(
   id INT NOT NULL AUTO_INCREMENT,
