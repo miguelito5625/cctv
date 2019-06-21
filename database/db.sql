@@ -18,7 +18,7 @@ CREATE TABLE Gabinete(
 
 DROP VIEW view_Gabinete;
 CREATE VIEW view_Gabinete AS
-SELECT id, identificador, ubicacion, CONCAT(latitud, ',', longitud) AS coordenadas, estado
+SELECT id, identificador, ubicacion, CONCAT(latitud, ',', longitud) AS coordenadas, estado,
 CONCAT(updated_at, '') as updated_at, CONCAT(created_at, '') as created_at
 FROM Gabinete;
 

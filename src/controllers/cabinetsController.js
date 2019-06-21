@@ -5,7 +5,7 @@ cabinetsController.cabinetEmpy = (req, res) => {
 
   res.render('cabinets/index');
 
-}; 
+};  
 
 
 cabinetsController.cabinetList = (req, res) => {
