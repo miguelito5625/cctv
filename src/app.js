@@ -27,14 +27,14 @@ app.set('view engine', 'ejs');
 
 // middlewares
 //app.use(morgan('dev'));
-app.use(myConnection(mysql, {
-  host: '192.168.1.100',
-  user: 'desarrollador',
-  password: 'mariobross5625',
-  port: 3306,
-  database: 'cctv'
-}, 'single'));
-app.use(express.urlencoded({ extended: false }));
+// app.use(myConnection(mysql, {
+//   host: '192.168.1.100',
+//   user: 'desarrollador',
+//   password: 'mariobross5625',
+//   port: 3306,
+//   database: 'cctv'
+// }, 'single'));
+// app.use(express.urlencoded({ extended: false }));
 
 
 // static files
