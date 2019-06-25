@@ -1,64 +1,71 @@
+//Required files
 const express = require('express'),
   path = require('path'),
   morgan = require('morgan'),
   mysql = require('mysql'),
   myConnection = require('express-myconnection');
 
+  // Variables
 var fs = require('fs');
 var http = require('http');
 var https = require('https');
+
+//HTTPS options
 var privateKey = fs.readFileSync(path.join(__dirname, 'sslcert/privkey.pem'), 'utf8');
 var certificate = fs.readFileSync(path.join(__dirname, 'sslcert/cert.pem'), 'utf8');
-
 var credentials = {key: privateKey, cert: certificate};
 
- 
-const app = express();
+//HTTP options
+const httpApp = express();
+httpApp.set('port', process.env.PORT || 80);
+httpApp.get("*", function (req, res, next) {
+    res.redirect("https://" + req.headers.host + req.path);
+});
+
+
+//HTTPS initialice
+const httpsApp = express();
 
 // importing routes
 const cabinetsRoutes = require('./routes/cabinetsRoutes');
 const devicesRoutes = require('./routes/devicesRoutes');
 
 // settings
-app.set('port', process.env.PORT || 443);
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+httpsApp.set('port', process.env.PORT || 443);
+httpsApp.set('views', path.join(__dirname, 'views'));
+httpsApp.set('view engine', 'ejs');
 
 
 // middlewares
-//app.use(morgan('dev'));
-// app.use(myConnection(mysql, {
-//   host: '192.168.1.100',
-//   user: 'desarrollador',
-//   password: 'mariobross5625',
-//   port: 3306,
-//   database: 'cctv'
-// }, 'single'));
-// app.use(express.urlencoded({ extended: false }));
+//httpsApp.use(morgan('dev'));
+httpsApp.use(myConnection(mysql, {
+  host: '192.168.1.100',
+  user: 'desarrollador',
+  password: 'mariobross5625',
+  port: 3306,
+  database: 'cctv'
+}, 'single'));
+httpsApp.use(express.urlencoded({ extended: false }));
 
 
 // static files
-app.use(express.static(path.join(__dirname, 'public')));
+httpsApp.use(express.static(path.join(__dirname, 'public')));
 
 // routes
-app.use('/', cabinetsRoutes);
-app.use('/', devicesRoutes);
-// app.use(function(req, res, next) {
-//   res.status(404).render('404/index');
-// });
+httpsApp.use('/', cabinetsRoutes);
+httpsApp.use('/', devicesRoutes);
 
 
-// starting the server
-// const server = app.listen(app.get('port'), () => {
-//   console.log(`server on port ${app.get('port')}`);
-// });
+var httpsServer = https.createServer(credentials, httpsApp);
 
-var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
 
-httpServer.listen(80);
-const server = httpsServer.listen(app.get('port'), () => {
-  console.log(`server on port ${app.get('port')}`);
+http.createServer(httpApp).listen(httpApp.get('port'), function() {
+  console.log('Express HTTP server listening on port ' + httpApp.get('port'));
+});
+
+
+const server = httpsServer.listen(httpsApp.get('port'), () => {
+  console.log(`HTTPS server on port ${httpsApp.get('port')}`);
 });
 
 
