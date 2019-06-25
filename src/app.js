@@ -76,7 +76,7 @@ const io = SocketIO(server);
 
 io.on('connection', (socket) => {
 
-  //console.log('new connection');
+  //console.log('new connection'); 
 
   socket.on('notify:cabinetInsert', (data) => {
 
